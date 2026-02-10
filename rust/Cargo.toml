@@ -1,0 +1,26 @@
+[package]
+name = "rust_lib_bruteforce_doc_break"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "staticlib"]
+
+[dependencies]
+flutter_rust_bridge = "=2.11.1"
+
+# Para ler e testar senhas em arquivos ZIP
+zip = { version = "0.6", default-features = false, features = ["aes-crypto", "deflate"] }
+
+# Paralelização automática em múltiplos núcleos da CPU
+rayon = "1.10"
+
+# Tratamento de erros
+anyhow = "1.0"
+
+# Mutex de alta performance
+parking_lot = "0.12"
+crc32fast = "1.5.0"
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(frb_expand)'] }

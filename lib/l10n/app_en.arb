@@ -1,0 +1,121 @@
+{
+  "appTitle": "Password Cracker - Brute Force",
+  "noResult": "No result",
+  "passwordFound": "✓ PASSWORD FOUND",
+  "passwordNotFound": "✗ PASSWORD NOT FOUND",
+  "statistics": "STATISTICS",
+  "totalTime": "Total Time",
+  "attempts": "Attempts",
+  "speed": "Speed",
+  "state": "State",
+  "console": "CONSOLE",
+  "passwordCopied": "Password copied!",
+  "copyPassword": "Copy Password",
+  "newSearch": "New Search",
+  "tryAgain": "Try Again",
+  "newFile": "New File",
+  "loading": "Loading...",
+  "processingPassword": "Processing...",
+  "passwordNotFoundMessage": "Password not found with current settings.",
+  "bruteForcingStrategy": "Brute Force Strategy",
+  "numbers": "Numbers (0-9)",
+  "lowercase": "Lowercase (a-z)",
+  "uppercase": "Uppercase (A-Z)",
+  "symbols": "Symbols (!@#...)",
+  "passwordLength": "Password Length",
+  "minMaxCharacters": "{min} - {max} characters",
+  "@minMaxCharacters": {
+    "description": "Password length range",
+    "placeholders": {
+      "min": {"type": "int"},
+      "max": {"type": "int"}
+    }
+  },
+  "warningLongPasswords": "Warning: Long passwords may take hours/days on mobile.",
+  "attackInProgress": "Attack in Progress",
+  "starting": "Starting...",
+  "performance": "PERFORMANCE",
+  "running": "RUNNING",
+  "paused": "PAUSED",
+  "waitingAttempts": "Waiting for attempts...",
+  "configureAttack": "Attack Configuration",
+  "optimizationTip": "Optimization Tip",
+  "optimizationMessage": "The fewer character options and shorter the length, the faster the attack.",
+  "startAttack": "START PASSWORD CRACKING",
+  "back": "Back",
+  "selectProtectedFile": "Select a protected file",
+  "supportedFormats": "Supported formats: {formats}",
+  "@supportedFormats": {
+    "description": "Supported file formats",
+    "placeholders": {
+      "formats": {"type": "String"}
+    }
+  },
+  "importFile": "Import File",
+  "passwordCrackerTitle": "🔐 PASSWORD CRACKER",
+  "bruteForceRealTime": "Brute Force in Real Time",
+  "invalidConfiguration": "Invalid configuration",
+  "error": "Error: {message}",
+  "@error": {
+    "description": "Error message",
+    "placeholders": {
+      "message": {"type": "String"}
+    }
+  },
+  "passwordStrength": "Password Strength Analysis",
+  "weakPassword": "WEAK PASSWORD",
+  "moderatePassword": "MODERATE PASSWORD",
+  "strongPassword": "STRONG PASSWORD",
+  "veryStrongPassword": "VERY STRONG PASSWORD",
+  "weakPasswordMessage": "This configuration indicates a weak password. The attack should succeed quickly (under 1 minute).",
+  "moderatePasswordMessage": "This configuration indicates a moderate password. The attack may take up to {minutes} minutes.",
+  "@moderatePasswordMessage": {
+    "description": "Message for moderate password difficulty",
+    "placeholders": {
+      "minutes": {"type": "String"}
+    }
+  },
+  "strongPasswordMessage": "This configuration indicates a strong password. The attack may take up to {hours} hours.",
+  "@strongPasswordMessage": {
+    "description": "Message for strong password difficulty",
+    "placeholders": {
+      "hours": {"type": "String"}
+    }
+  },
+  "veryStrongPasswordMessage": "This configuration indicates a VERY STRONG password (est. {duration}). Brute-force is IMPRACTICAL with common devices. This app is effective only for WEAK passwords (4-6 characters).",
+  "@veryStrongPasswordMessage": {
+    "description": "Message for very strong password (impractical to break)",
+    "placeholders": {
+      "duration": {"type": "String"}
+    }
+  },
+  "veryStrongPasswordMessageYears": "This configuration indicates a VERY STRONG password (est. {years} years). Brute-force is IMPRACTICAL with common devices. This app is effective only for WEAK passwords (4-6 characters).",
+  "@veryStrongPasswordMessageYears": {
+    "description": "Message for very strong password in years",
+    "placeholders": {
+      "years": {"type": "String"}
+    }
+  },
+  "passwordConfigurationInfo": "Configuration: {minLength}-{maxLength} chars • Charset: {charsetSize} characters",
+  "@passwordConfigurationInfo": {
+    "description": "Password configuration details",
+    "placeholders": {
+      "minLength": {"type": "int"},
+      "maxLength": {"type": "int"},
+      "charsetSize": {"type": "int"}
+    }
+  },
+  "appEffectiveFor": "This app is most effective for passwords under 7 characters.",
+  "estimatedDays": "{days} days",
+  "@estimatedDays": {
+    "description": "Estimated time in days",
+    "placeholders": {
+      "days": {"type": "String"}
+    }
+  },
+  "lastPassword": "Last Password",
+  "consoleAttempts": "Attempts",
+  "consoleSpeed": "Speed",
+  "consoleElapsed": "Elapsed"
+}
+

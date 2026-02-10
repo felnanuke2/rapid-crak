@@ -1,0 +1,120 @@
+{
+  "appTitle": "Quebra de Senha - Brute Force",
+  "noResult": "Sem resultado",
+  "passwordFound": "✓ SENHA ENCONTRADA",
+  "passwordNotFound": "✗ NÃO ENCONTRADA",
+  "statistics": "ESTATÍSTICAS",
+  "totalTime": "Tempo Total",
+  "attempts": "Tentativas",
+  "speed": "Velocidade",
+  "state": "Estado",
+  "console": "CONSOLE",
+  "passwordCopied": "Senha copiada!",
+  "copyPassword": "Copiar Senha",
+  "newSearch": "Nova Busca",
+  "tryAgain": "Tentar Novamente",
+  "newFile": "Novo Arquivo",
+  "loading": "Carregando...",
+  "processingPassword": "Processando...",
+  "passwordNotFoundMessage": "Senha não encontrada com as configurações atuais.",
+  "bruteForcingStrategy": "Estratégia de Força Bruta",
+  "numbers": "Números (0-9)",
+  "lowercase": "Minúsculas (a-z)",
+  "uppercase": "Maiúsculas (A-Z)",
+  "symbols": "Símbolos (!@#...)",
+  "passwordLength": "Comprimento da Senha",
+  "minMaxCharacters": "{min} - {max} caracteres",
+  "@minMaxCharacters": {
+    "description": "Intervalo de comprimento da senha",
+    "placeholders": {
+      "min": {"type": "int"},
+      "max": {"type": "int"}
+    }
+  },
+  "warningLongPasswords": "Atenção: Senhas longas podem levar horas/dias no celular.",
+  "attackInProgress": "Ataque em Progresso",
+  "starting": "Iniciando...",
+  "performance": "PERFORMANCE",
+  "running": "RODANDO",
+  "paused": "PAUSADO",
+  "waitingAttempts": "Aguardando tentativas...",
+  "configureAttack": "Configuração do Ataque",
+  "optimizationTip": "Dica de Otimização",
+  "optimizationMessage": "Quanto menos opções de caracteres e menor o comprimento, mais rápido será o ataque.",
+  "startAttack": "INICIAR QUEBRA DE SENHA",
+  "back": "Voltar",
+  "selectProtectedFile": "Selecione um arquivo protegido",
+  "supportedFormats": "Formatos suportados: {formats}",
+  "@supportedFormats": {
+    "description": "Formatos de arquivo suportados",
+    "placeholders": {
+      "formats": {"type": "String"}
+    }
+  },
+  "importFile": "Importar Arquivo",
+  "passwordCrackerTitle": "🔐 QUEBRA DE SENHA",
+  "bruteForceRealTime": "Força Bruta em Tempo Real",
+  "invalidConfiguration": "Configuração inválida",
+  "error": "Erro: {message}",
+  "@error": {
+    "description": "Mensagem de erro",
+    "placeholders": {
+      "message": {"type": "String"}
+    }
+  },
+  "passwordStrength": "Análise de Força da Senha",
+  "weakPassword": "SENHA FRACA",
+  "moderatePassword": "SENHA MODERADA",
+  "strongPassword": "SENHA FORTE",
+  "veryStrongPassword": "SENHA MUITO FORTE",
+  "weakPasswordMessage": "Esta configuração indica uma senha fraca. O ataque deve ter sucesso rapidamente (menos de 1 minuto).",
+  "moderatePasswordMessage": "Esta configuração indica uma senha moderada. O ataque pode levar até {minutes} minutos.",
+  "@moderatePasswordMessage": {
+    "description": "Mensagem para dificuldade de senha moderada",
+    "placeholders": {
+      "minutes": {"type": "String"}
+    }
+  },
+  "strongPasswordMessage": "Esta configuração indica uma senha forte. O ataque pode levar até {hours} horas.",
+  "@strongPasswordMessage": {
+    "description": "Mensagem para dificuldade de senha forte",
+    "placeholders": {
+      "hours": {"type": "String"}
+    }
+  },
+  "veryStrongPasswordMessage": "Esta configuração indica uma SENHA MUITO FORTE (est. {duration}). Força bruta é IMPRATICÁVEL em dispositivos comuns. Este app é efetivo apenas para SENHAS FRACAS (4-6 caracteres).",
+  "@veryStrongPasswordMessage": {
+    "description": "Mensagem para senha muito forte (impraticável quebrar)",
+    "placeholders": {
+      "duration": {"type": "String"}
+    }
+  },
+  "veryStrongPasswordMessageYears": "Esta configuração indica uma SENHA MUITO FORTE (est. {years} anos). Força bruta é IMPRATICÁVEL em dispositivos comuns. Este app é efetivo apenas para SENHAS FRACAS (4-6 caracteres).",
+  "@veryStrongPasswordMessageYears": {
+    "description": "Mensagem para senha muito forte em anos",
+    "placeholders": {
+      "years": {"type": "String"}
+    }
+  },
+  "passwordConfigurationInfo": "Configuração: {minLength}-{maxLength} chars • Charset: {charsetSize} caracteres",
+  "@passwordConfigurationInfo": {
+    "description": "Detalhes da configuração de senha",
+    "placeholders": {
+      "minLength": {"type": "int"},
+      "maxLength": {"type": "int"},
+      "charsetSize": {"type": "int"}
+    }
+  },
+  "appEffectiveFor": "Este app é mais efetivo para senhas com menos de 7 caracteres.",
+  "estimatedDays": "{days} dias",
+  "@estimatedDays": {
+    "description": "Tempo estimado em dias",
+    "placeholders": {
+      "days": {"type": "String"}
+    }
+  },
+  "lastPassword": "Última Senha",
+  "consoleAttempts": "Tentativas",
+  "consoleSpeed": "Velocidade",
+  "consoleElapsed": "Decorrido"
+}
