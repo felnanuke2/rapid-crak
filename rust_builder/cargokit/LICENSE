@@ -40,3 +40,24 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
+================================================================================
+
+ROCKYOU.TXT PASSWORD LIST
+
+The rockyou.txt password list included in this project is used for educational,
+research, and security testing purposes only. This dataset is licensed under
+Creative Commons Attribution (CC BY 4.0).
+
+Attribution: rockyou.txt dataset
+
+================================================================================
+
+ADDITIONAL THIRD-PARTY OPEN SOURCE LICENSES
+
+This project incorporates various open source libraries and packages.
+For a complete list of dependencies and their respective licenses, 
+please refer to the pubspec.yaml and Cargo.toml files.
+
+All third-party software is used in accordance with their respective
+open source licenses.
+
