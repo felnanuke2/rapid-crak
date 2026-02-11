@@ -217,6 +217,53 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get consoleElapsed => 'Decorrido';
+
+  @override
+  String get unsupportedFileExtension =>
+      'Arquivo não suportado. Use .zip, .pdf, .rar ou .7z';
+
+  @override
+  String get minLengthGreaterThanMax =>
+      'Comprimento mínimo não pode ser maior que o máximo';
+
+  @override
+  String get maxLengthWarning =>
+      'Comprimento máximo recomendado é 16 (muito longo)';
+
+  @override
+  String passwordsPerSecond(String count) {
+    return '$count senhas/seg';
+  }
+
+  @override
+  String get attemptedLabel => 'testadas';
+
+  @override
+  String get noPasswordFound => 'Nenhuma senha encontrada';
+
+  @override
+  String attackError(String message) {
+    return 'Erro no ataque: $message';
+  }
+
+  @override
+  String unsupportedFileType(String formats) {
+    return 'Tipo de arquivo não suportado. Use: $formats';
+  }
+
+  @override
+  String get emptyFile => 'Arquivo vazio';
+
+  @override
+  String get fileTooLarge => 'Arquivo muito grande (máximo 5GB)';
+
+  @override
+  String get fileReadError => 'Não foi possível ler os bytes do arquivo';
+
+  @override
+  String fileSelectError(String error) {
+    return 'Erro ao selecionar arquivo: $error';
+  }
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -432,4 +479,51 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get consoleElapsed => 'Decorrido';
+
+  @override
+  String get unsupportedFileExtension =>
+      'Arquivo não suportado. Use .zip, .pdf, .rar ou .7z';
+
+  @override
+  String get minLengthGreaterThanMax =>
+      'Comprimento mínimo não pode ser maior que o máximo';
+
+  @override
+  String get maxLengthWarning =>
+      'Comprimento máximo recomendado é 16 (muito longo)';
+
+  @override
+  String passwordsPerSecond(String count) {
+    return '$count senhas/seg';
+  }
+
+  @override
+  String get attemptedLabel => 'testadas';
+
+  @override
+  String get noPasswordFound => 'Nenhuma senha encontrada';
+
+  @override
+  String attackError(String message) {
+    return 'Erro no ataque: $message';
+  }
+
+  @override
+  String unsupportedFileType(String formats) {
+    return 'Tipo de arquivo não suportado. Use: $formats';
+  }
+
+  @override
+  String get emptyFile => 'Arquivo vazio';
+
+  @override
+  String get fileTooLarge => 'Arquivo muito grande (máximo 5GB)';
+
+  @override
+  String get fileReadError => 'Não foi possível ler os bytes do arquivo';
+
+  @override
+  String fileSelectError(String error) {
+    return 'Erro ao selecionar arquivo: $error';
+  }
 }

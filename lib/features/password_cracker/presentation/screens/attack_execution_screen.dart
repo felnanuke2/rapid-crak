@@ -152,7 +152,7 @@ class _AttackExecutionScreenState
                   children: [
                     StatCard(
                       label: AppLocalizations.of(context)!.speed,
-                      value: AppFormatters.formatSpeed(stats.passwordsPerSecond),
+                      value: AppFormatters.formatSpeed(stats.passwordsPerSecond, context: context),
                       icon: Icons.speed,
                     ),
                     StatCard(

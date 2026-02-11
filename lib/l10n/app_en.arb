@@ -116,6 +116,42 @@
   "lastPassword": "Last Password",
   "consoleAttempts": "Attempts",
   "consoleSpeed": "Speed",
-  "consoleElapsed": "Elapsed"
+  "consoleElapsed": "Elapsed",
+  "unsupportedFileExtension": "Unsupported file. Use .zip, .pdf, .rar or .7z",
+  "minLengthGreaterThanMax": "Minimum length cannot be greater than maximum",
+  "maxLengthWarning": "Maximum recommended length is 16 (too long)",
+  "passwordsPerSecond": "{count} passwords/sec",
+  "@passwordsPerSecond": {
+    "description": "Passwords per second formatting",
+    "placeholders": {
+      "count": {"type": "String"}
+    }
+  },
+  "attemptedLabel": "attempted",
+  "noPasswordFound": "No password found",
+  "attackError": "Attack error: {message}",
+  "@attackError": {
+    "description": "Error message during attack",
+    "placeholders": {
+      "message": {"type": "String"}
+    }
+  },
+  "unsupportedFileType": "Unsupported file type. Use: {formats}",
+  "@unsupportedFileType": {
+    "description": "Error when file type is not supported",
+    "placeholders": {
+      "formats": {"type": "String"}
+    }
+  },
+  "emptyFile": "Empty file",
+  "fileTooLarge": "File too large (maximum 5GB)",
+  "fileReadError": "Could not read file bytes",
+  "fileSelectError": "Error selecting file: {error}",
+  "@fileSelectError": {
+    "description": "Error when selecting a file",
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  }
 }
 

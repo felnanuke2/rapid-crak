@@ -81,7 +81,139 @@ flutter_rust_bridge_codegen generate
 flutter run -d macos
 ```
 
-## 📖 Usage
+## � How to Run
+
+### Requirements
+
+Before running the project, ensure you have the following installed:
+
+1. **Rust Toolchain**
+   - [Install Rust](https://rustup.rs/) from rustup.rs
+   - Verify installation: `rustc --version` and `cargo --version`
+
+2. **Flutter SDK**
+   - [Install Flutter](https://flutter.dev/docs/get-started/install)
+   - Verify installation: `flutter doctor`
+
+3. **flutter_rust_bridge CLI**
+   ```bash
+   cargo install flutter_rust_bridge_codegen
+   ```
+
+### Running with VS Code (Recommended)
+
+The project is configured with `.vscode/launch.json` and `.vscode/tasks.json` to ensure safe and automated execution:
+
+#### Step 1: Build Rust Bindings
+Before launching for the first time, generate Rust bindings:
+
+```bash
+flutter_rust_bridge_codegen generate
+```
+
+Or use the configured VS Code task:
+- Press `Cmd+Shift+B` (macOS) or `Ctrl+Shift+B` (Linux/Windows)
+- Select **flutter_rust_bridge codegen**
+
+#### Step 2: Launch the App
+- Press `F5` to start debugging in VS Code
+- Or use **Run → Start Debugging** from the menu
+
+**What happens automatically:**
+- ✅ `flutter_rust_bridge codegen` task runs (pre-launch task)
+- ✅ Rust bindings are generated
+- ✅ Flutter app compiles with the compiled Rust native library
+- ✅ App launches on connected device/emulator
+
+#### Step 3: Select Target Platform
+When launching, choose your target platform:
+- `macos` - macOS
+- `ios` - iOS device or simulator
+- `android` - Android device or emulator
+- `web` - Web browser
+- `linux` - Linux desktop
+- `windows` - Windows desktop
+
+#### Example: Run on macOS
+```bash
+flutter run -d macos
+```
+
+#### Example: Run on iOS Simulator
+```bash
+flutter run -d "iPhone 15"
+```
+
+### Running from Terminal
+
+#### Full Setup (First Time)
+```bash
+# 1. Install Rust dependencies
+rustup target add aarch64-apple-darwin x86_64-apple-darwin  # macOS
+rustup target add aarch64-linux-gnu                          # Linux
+rustup target add x86_64-pc-windows-msvc                     # Windows
+
+# 2. Install Flutter dependencies
+flutter pub get
+
+# 3. Generate Rust bindings
+flutter_rust_bridge_codegen generate
+
+# 4. Run the app
+flutter run -d macos
+```
+
+#### Quick Run (After Initial Setup)
+```bash
+flutter run -d macos
+```
+
+### How It Works Safely
+
+1. **Build System Integration**
+   - `flutter_rust_bridge_codegen generate` automatically compiles Rust code to native libraries
+   - Builds are cached to avoid unnecessary recompilation
+   - Each platform gets its native binary (Mach-O for macOS, ELF for Linux, PE for Windows, etc.)
+
+2. **Pre-launch Task in VS Code**
+   - The debugger automatically runs `flutter_rust_bridge codegen` before launching
+   - Ensures bindings are always up-to-date with Rust source changes
+   - Prevents "missing library" errors
+
+3. **Error Handling**
+   - If the Rust build fails, the error message clearly indicates the issue
+   - Check the terminal output for specific compilation errors
+   - Rebuild bindings if you modify any Rust code
+
+### Troubleshooting
+
+**"Rust tool not found"**
+```bash
+rustup update
+cargo install flutter_rust_bridge_codegen
+```
+
+**"flutter_rust_bridge_codegen: command not found"**
+```bash
+# Add Cargo bin to PATH
+export PATH="$HOME/.cargo/bin:$PATH"
+```
+
+**"Native library not found" or crash on startup**
+```bash
+# Regenerate bindings and rebuild
+flutter clean
+flutter_rust_bridge_codegen generate
+flutter pub get
+flutter run -d macos
+```
+
+**Slow first build**
+- Initial builds take longer due to Rust compilation
+- Subsequent builds are faster (incremental compilation)
+- Use `--release` for optimized builds: `flutter run --release -d macos`
+
+## �📖 Usage
 
 ### Basic Workflow
 

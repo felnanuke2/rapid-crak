@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import '../../domain/entities/attack_entities.dart';
 import '../../presentation/state/password_cracker_provider.dart';
 import '../../../../src/rust/api/password_cracker.dart' as rust;
 import '../../../../src/rust/frb_generated.dart';
+import '../../../../generated_l10n/app_localizations.dart';
 
 /// Serviço que conecta o Rust ao Flutter
 /// Gerencia a comunicação entre a lógica de força bruta (Rust) e a UI (Flutter)
@@ -65,6 +67,7 @@ class RustPasswordCrackerService {
     required Uint8List fileBytes,
     required AttackConfiguration config,
     required PasswordCrackerProvider provider,
+    BuildContext? context,
   }) async {
     if (!_initialized) {
       await initialize();
@@ -131,12 +134,18 @@ class RustPasswordCrackerService {
               totalTime: Duration(seconds: lastProgress!.elapsedSeconds.toInt()),
             ));
           } else {
-            provider.setError('Nenhuma senha encontrada');
+            final errorMessage = context != null
+                ? AppLocalizations.of(context)!.noPasswordFound
+                : 'Nenhuma senha encontrada';
+            provider.setError(errorMessage);
           }
         },
         onError: (e) {
           _activeAttackSubscription = null;
-          provider.setError('Erro no ataque: $e');
+          final errorMessage = context != null
+              ? AppLocalizations.of(context)!.attackError(e.toString())
+              : 'Erro no ataque: $e';
+          provider.setError(errorMessage);
           if (kDebugMode) {
             print('Erro no ataque de força bruta: $e');
           }
@@ -144,7 +153,10 @@ class RustPasswordCrackerService {
       );
     } catch (e) {
       _activeAttackSubscription = null;
-      provider.setError('Erro no ataque: $e');
+      final errorMessage = context != null
+          ? AppLocalizations.of(context)!.attackError(e.toString())
+          : 'Erro no ataque: $e';
+      provider.setError(errorMessage);
       if (kDebugMode) {
         print('Erro no ataque de força bruta: $e');
       }

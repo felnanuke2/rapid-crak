@@ -468,6 +468,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Elapsed'**
   String get consoleElapsed;
+
+  /// No description provided for @unsupportedFileExtension.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported file. Use .zip, .pdf, .rar or .7z'**
+  String get unsupportedFileExtension;
+
+  /// No description provided for @minLengthGreaterThanMax.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum length cannot be greater than maximum'**
+  String get minLengthGreaterThanMax;
+
+  /// No description provided for @maxLengthWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum recommended length is 16 (too long)'**
+  String get maxLengthWarning;
+
+  /// Passwords per second formatting
+  ///
+  /// In en, this message translates to:
+  /// **'{count} passwords/sec'**
+  String passwordsPerSecond(String count);
+
+  /// No description provided for @attemptedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'attempted'**
+  String get attemptedLabel;
+
+  /// No description provided for @noPasswordFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No password found'**
+  String get noPasswordFound;
+
+  /// Error message during attack
+  ///
+  /// In en, this message translates to:
+  /// **'Attack error: {message}'**
+  String attackError(String message);
+
+  /// Error when file type is not supported
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported file type. Use: {formats}'**
+  String unsupportedFileType(String formats);
+
+  /// No description provided for @emptyFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Empty file'**
+  String get emptyFile;
+
+  /// No description provided for @fileTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'File too large (maximum 5GB)'**
+  String get fileTooLarge;
+
+  /// No description provided for @fileReadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not read file bytes'**
+  String get fileReadError;
+
+  /// Error when selecting a file
+  ///
+  /// In en, this message translates to:
+  /// **'Error selecting file: {error}'**
+  String fileSelectError(String error);
 }
 
 class _AppLocalizationsDelegate

@@ -116,6 +116,42 @@
   "lastPassword": "Última Senha",
   "consoleAttempts": "Tentativas",
   "consoleSpeed": "Velocidade",
-  "consoleElapsed": "Decorrido"
+  "consoleElapsed": "Decorrido",
+  "unsupportedFileExtension": "Arquivo não suportado. Use .zip, .pdf, .rar ou .7z",
+  "minLengthGreaterThanMax": "Comprimento mínimo não pode ser maior que o máximo",
+  "maxLengthWarning": "Comprimento máximo recomendado é 16 (muito longo)",
+  "passwordsPerSecond": "{count} senhas/seg",
+  "@passwordsPerSecond": {
+    "description": "Formatação de senhas por segundo",
+    "placeholders": {
+      "count": {"type": "String"}
+    }
+  },
+  "attemptedLabel": "testadas",
+  "noPasswordFound": "Nenhuma senha encontrada",
+  "attackError": "Erro no ataque: {message}",
+  "@attackError": {
+    "description": "Mensagem de erro durante ataque",
+    "placeholders": {
+      "message": {"type": "String"}
+    }
+  },
+  "unsupportedFileType": "Tipo de arquivo não suportado. Use: {formats}",
+  "@unsupportedFileType": {
+    "description": "Erro quando tipo de arquivo não for suportado",
+    "placeholders": {
+      "formats": {"type": "String"}
+    }
+  },
+  "emptyFile": "Arquivo vazio",
+  "fileTooLarge": "Arquivo muito grande (máximo 5GB)",
+  "fileReadError": "Não foi possível ler os bytes do arquivo",
+  "fileSelectError": "Erro ao selecionar arquivo: {error}",
+  "@fileSelectError": {
+    "description": "Erro ao selecionar um arquivo",
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  }
 }
 

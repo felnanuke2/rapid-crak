@@ -269,6 +269,7 @@ class _AttackConfigScreenState extends State<AttackConfigScreen> {
       fileBytes: provider.loadedFile!.bytes,
       config: config,
       provider: provider,
+      context: context,
     );
   }
 }

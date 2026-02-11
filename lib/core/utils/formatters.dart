@@ -1,4 +1,6 @@
 import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
+import '../../generated_l10n/app_localizations.dart';
 
 /// Utilitários para formatação de números, durações e textos
 class AppFormatters {
@@ -11,8 +13,14 @@ class AppFormatters {
 
   /// Formata velocidade (senhas por segundo)
   /// Ex: 1500000 -> "1.500.000 senhas/seg"
-  static String formatSpeed(double passwordsPerSecond) {
-    return '${formatLargeNumber(passwordsPerSecond.round())} senhas/seg';
+  /// Para usar com localization, forneça um [BuildContext]
+  static String formatSpeed(double passwordsPerSecond, {BuildContext? context}) {
+    final formatted = formatLargeNumber(passwordsPerSecond.round());
+    if (context == null) {
+      // Fallback para português padrão
+      return '$formatted senhas/seg';
+    }
+    return AppLocalizations.of(context)!.passwordsPerSecond(formatted);
   }
 
   /// Formata duração para HH:MM:SS
@@ -46,8 +54,14 @@ class AppFormatters {
 
   /// Formata tentativas com formatação de número grande
   /// Ex: 45201000 -> "45.201.000 testadas"
-  static String formatAttempts(int attempts) {
-    return '${formatLargeNumber(attempts)} testadas';
+  /// Para usar com localization, forneça um [BuildContext]
+  static String formatAttempts(int attempts, {BuildContext? context}) {
+    final formatted = formatLargeNumber(attempts);
+    if (context == null) {
+      // Fallback para português padrão
+      return '$formatted testadas';
+    }
+    return '${AppLocalizations.of(context)!.attemptedLabel} $formatted';
   }
 
   /// Trunca texto para comprimento máximo com reticências

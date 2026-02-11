@@ -217,4 +217,50 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get consoleElapsed => 'Elapsed';
+
+  @override
+  String get unsupportedFileExtension =>
+      'Unsupported file. Use .zip, .pdf, .rar or .7z';
+
+  @override
+  String get minLengthGreaterThanMax =>
+      'Minimum length cannot be greater than maximum';
+
+  @override
+  String get maxLengthWarning => 'Maximum recommended length is 16 (too long)';
+
+  @override
+  String passwordsPerSecond(String count) {
+    return '$count passwords/sec';
+  }
+
+  @override
+  String get attemptedLabel => 'attempted';
+
+  @override
+  String get noPasswordFound => 'No password found';
+
+  @override
+  String attackError(String message) {
+    return 'Attack error: $message';
+  }
+
+  @override
+  String unsupportedFileType(String formats) {
+    return 'Unsupported file type. Use: $formats';
+  }
+
+  @override
+  String get emptyFile => 'Empty file';
+
+  @override
+  String get fileTooLarge => 'File too large (maximum 5GB)';
+
+  @override
+  String get fileReadError => 'Could not read file bytes';
+
+  @override
+  String fileSelectError(String error) {
+    return 'Error selecting file: $error';
+  }
 }
