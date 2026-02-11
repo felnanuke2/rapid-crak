@@ -1,237 +1,343 @@
-# 🔐 Quebra de Senha - Arquitetura e Design
+# 🔐 Password Cracking - Architecture and Design
 
-## 📐 Arquitetura Clean Code + SOLID
+## 📐 Clean Code + SOLID Architecture
 
-Este projeto segue princípios de **Clean Architecture**, **SOLID** e **DRY** (Don't Repeat Yourself) para garantir código escalável, testável e bem organizado.
+This project follows the principles of **Clean Architecture**, **SOLID**, and **DRY** (Don't Repeat Yourself) to ensure scalable, testable, and well-organized code.
 
-### Estrutura de Pastas
+### Folder Structure
 
 ```
 lib/
-├── main.dart                 # Ponto de entrada
+├── main.dart                 # Entry point
 ├── app/
-│   ├── app.dart             # Widget principal (MyApp)
-│   └── router.dart          # Roteador baseado em estado
-├── core/                    # Código compartilhado (reutilizável em toda app)
+│   ├── app.dart             # Main widget (MyApp)
+│   └── router.dart          # State-based router
+├── core/                    # Shared code (reusable throughout the app)
 │   ├── theme/
-│   │   ├── app_colors.dart      # Paleta de cores (Dark Mode)
-│   │   ├── app_text_styles.dart # Estilos tipográficos (Inter + JetBrains Mono)
-│   │   └── app_theme.dart       # Tema completo (Material 3)
+│   │   ├── app_colors.dart      # Color palette (Dark Mode)
+│   │   ├── app_text_styles.dart # Typography styles (Inter + JetBrains Mono)
+│   │   └── app_theme.dart       # Complete theme (Material 3)
 │   ├── utils/
-│   │   ├── formatters.dart      # Formatação de números, durações, etc
-│   │   └── validators.dart      # Validadores de entrada
+│   │   ├── formatters.dart      # Number formatting, durations, etc
+│   │   └── validators.dart      # Input validators
 │   ├── extensions/
-│   │   └── extensions.dart      # Extensões úteis para String, Duration, etc
+│   │   └── extensions.dart      # Useful extensions for String, Duration, etc
 │   └── domain/
 │       └── entities/
 │           └── index.dart       # Barrel file
-├── features/                 # Features isoladas (cada uma é um módulo)
+├── features/                 # Isolated features (each is a module)
 │   └── password_cracker/
 │       ├── domain/
 │       │   └── entities/
-│       │       └── attack_entities.dart  # Modelos de domínio
+│       │       └── attack_entities.dart  # Domain models
 │       └── presentation/
 │           ├── screens/
-│           │   ├── import_file_screen.dart        # Tela 1: Importação
-│           │   ├── attack_config_screen.dart      # Tela 2: Configuração
-│           │   ├── attack_execution_screen.dart   # Tela 3: Execução
-│           │   └── attack_result_screen.dart      # Tela 4: Resultado
+│           │   ├── import_file_screen.dart        # Screen 1: Import
+│           │   ├── attack_config_screen.dart      # Screen 2: Configuration
+│           │   ├── attack_execution_screen.dart   # Screen 3: Execution
+│           │   └── attack_result_screen.dart      # Screen 4: Result
 │           ├── widgets/
-│           │   └── tech_widgets.dart         # Widgets reutilizáveis
+│           │   └── tech_widgets.dart         # Reusable widgets
 │           └── state/
 │               └── password_cracker_provider.dart # State (ChangeNotifier)
 └── services/
-    └── file_service.dart   # Serviço de arquivo (file picker)
+    └── file_service.dart   # File service (file picker)
 ```
 
 ---
 
 ## 🎨 Design System
 
-### Identidade Visual
+### Visual Identity
 
-**Dark Mode Obrigatório** - Essencial para:
-- Sensação de "ferramenta técnica"
-- Economia de bateria (importante com CPU alta)
-- Redução de fadiga ocular
+**Mandatory Dark Mode** - Essential for:
+- "Technical tool" feel
+- Battery savings (important with high CPU usage)
+- Reduced eye strain
 
-### Paleta de Cores
+### Color Palette
 
-| Elemento | Cor | Hex |
-|----------|-----|-----|
-| Fundo | Preto Absoluto | `#121212` |
-| Surface | Cinza Chumbo | `#1E1E1E` |
-| Primária (CTA) | Rust Orange | `#E57373` |
-| Secundária | Matrix Green | `#00E676` |
-| Texto | Branco | `#FFFFFF` |
-| Texto Secundário | Cinza Claro | `#B0B0B0` |
-| Sucesso | Verde | `#4CAF50` |
-| Erro | Vermelho | `#F44336` |
-| Aviso | Amarelo | `#FFC107` |
+| Element | Color | Hex |
+|---------|-------|-----|
+| Background | Absolute Black | `#121212` |
+| Surface | Lead Gray | `#1E1E1E` |
+| Primary (CTA) | Rust Orange | `#E57373` |
+| Secondary | Matrix Green | `#00E676` |
+| Text | White | `#FFFFFF` |
+| Secondary Text | Light Gray | `#B0B0B0` |
+| Success | Green | `#4CAF50` |
+| Error | Red | `#F44336` |
+| Warning | Yellow | `#FFC107` |
 
-### Tipografia
+### Typography
 
-- **UI Geral**: Inter (Google Fonts)
-- **Código/Senhas/Hashes**: JetBrains Mono (crucial para diferenciar 0 de O, 1 de l, etc)
+- **General UI**: Inter (Google Fonts)
+- **Code/Passwords/Hashes**: JetBrains Mono (crucial for distinguishing 0 from O, 1 from l, etc)
 
 ---
 
-## 🔄 Fluxo de Estados
+## 🔄 State Flow
 
 ```mermaid
 graph LR
-    A[idle] -->|Arquivo Carregado| B[configuring]
-    B -->|Iniciar Ataque| C[running]
-    C -->|Pausa| D[paused]
-    D -->|Retoma| C
-    C -->|Completo| E[completed]
-    C -->|Erro| F[error]
-    E -->|Nova Busca| B
-    B -->|Voltar| A
-    F -->|Tentar Novamente| B
+    A[idle] -->|File Loaded| B[configuring]
+    B -->|Start Attack| C[running]
+    C -->|Pause| D[paused]
+    D -->|Resume| C
+    C -->|Complete| E[completed]
+    C -->|Error| F[error]
+    E -->|New Search| B
+    B -->|Back| A
+    F -->|Retry| B
 ```
 
 ---
 
-## 📱 Telas (User Journey)
+## 📱 Screens (User Journey)
 
-### Tela 1: Importação (Clean State)
-- Ícone grande (🔐)
-- Texto descritivo
-- Botão FAB "Importar Arquivo"
-- Valida extensão e tamanho
+### Screen 1: Import (Clean State)
+- Large icon (🔐)
+- Descriptive text
+- FAB Button "Import File"
+- Validates extension and size
 
-### Tela 2: Configuração do Ataque (War Room)
-- Header com info do arquivo (nome, tamanho)
-- **Estratégia**: Chips para Números/Minúsculas/Maiúsculas/Símbolos
-- **Comprimento**: RangeSlider (1-16 caracteres)
-- Aviso se > 8 caracteres
-- Botão "INICIAR QUEBRA DE SENHA"
+### Screen 2: Attack Configuration (War Room)
+- Header with file info (name, size)
+- **Strategy**: Chips for Numbers/Lowercase/Uppercase/Symbols
+- **Length**: RangeSlider (1-16 characters)
+- Warning if > 8 characters
+- Button "START PASSWORD CRACKING"
 
-### Tela 3: Execução (Feedback Real-Time)
-- **Dashboard Performance**: Grandes números
-  - Velocidade: "1.500.000 senhas/seg"
-  - Tentativas: "45.201.000 testadas"
-  - Tempo: "00:04:12" (HH:MM:SS)
-- **Console Log**: Terminal style com últimas senhas testadas
-- **Indicador**: CircularProgressIndicator indeterminado (pulsando)
+### Screen 3: Execution (Real-Time Feedback)
+- **Performance Dashboard**: Large numbers
+  - Speed: "1,500,000 passwords/sec"
+  - Attempts: "45,201,000 tested"
+  - Time: "00:04:12" (HH:MM:SS)
+- **Console Log**: Terminal style with latest tested passwords
+- **Indicator**: Indeterminate CircularProgressIndicator (pulsing)
 
-### Tela 4: Resultado
-- **Sucesso**: 🔓 Ícone, senha em CodeDisplay (mono), botões "Copiar" + "Nova Busca"
-- **Falha**: 🔒 Ícone, mensagem de erro, botões "Tentar Novamente" + "Novo Arquivo"
+### Screen 4: Result
+- **Success**: 🔓 Icon, password in CodeDisplay (mono), buttons "Copy" + "New Search"
+- **Failure**: 🔒 Icon, error message, buttons "Retry" + "New File"
 
 ---
 
-## 🏗️ Princípios Aplicados
+## 🏗️ Applied Principles
 
 ### SOLID
 
-1. **S - Single Responsibility**: Cada classe/widget tem uma responsabilidade única
-   - `FileService`: apenas operações de arquivo
-   - `PasswordCrackerProvider`: apenas estado
-   - `PrimaryActionButton`: apenas um botão primário
+1. **S - Single Responsibility**: Each class/widget has a single responsibility
+   - `FileService`: file operations only
+   - `PasswordCrackerProvider`: state management only
+   - `PrimaryActionButton`: primary button only
 
-2. **O - Open/Closed**: Aberto para extensão, fechado para modificação
-   - `TechCard`: pode receber qualquer `child` widget
-   - `StatCard`: suporta ícone/cor customizável
+2. **O - Open/Closed**: Open for extension, closed for modification
+   - `TechCard`: can receive any `child` widget
+   - `StatCard`: supports customizable icon/color
 
-3. **L - Liskov Substitution**: Subtypes podem ser substituídas
-   - `PrimaryActionButton`, `SecondaryButton` implementam interface similar
+3. **L - Liskov Substitution**: Subtypes can be substituted
+   - `PrimaryActionButton`, `SecondaryButton` implement similar interface
 
-4. **I - Interface Segregation**: Classes não dependem de interfaces grandes
-   - `AppFormatters` é uma coleção de funções estáticas simples
-   - `AppValidators` não depende de UI
+4. **I - Interface Segregation**: Classes don't depend on large interfaces
+   - `AppFormatters` is a collection of simple static functions
+   - `AppValidators` doesn't depend on UI
 
-5. **D - Dependency Inversion**: Depender de abstrações, não implementações
-   - `PasswordCrackerProvider` gerencia estado
-   - Screens consomem via Provider (não instanciam diretamente)
+5. **D - Dependency Inversion**: Depend on abstractions, not implementations
+   - `PasswordCrackerProvider` manages state
+   - Screens consume via Provider (don't instantiate directly)
 
 ### DRY (Don't Repeat Yourself)
 
-- **Widgets reutilizáveis**: `PrimaryActionButton`, `TechCard`, `StatCard`
-- **Formatadores centralizados**: `AppFormatters` para números, durações, etc
-- **Validadores centralizados**: `AppValidators` para arquivo, config, etc
-- **Extensões**: Métodos em `String`, `Duration`, `int` para operações comuns
+- **Reusable widgets**: `PrimaryActionButton`, `TechCard`, `StatCard`
+- **Centralized formatters**: `AppFormatters` for numbers, durations, etc
+- **Centralized validators**: `AppValidators` for file, config, etc
+- **Extensions**: Methods on `String`, `Duration`, `int` for common operations
 
 ### Clean Code
 
-- **Nomes descritivos**: `PasswordCrackerProvider`, `AttackExecutionScreen`
-- **Funções pequenas**: Cada método tem responsabilidade clara
-- **Sem hardcodes**: Constantes em `AppColors`, `AppTextStyles`
-- **Organização clara**: core → features → screens/widgets
-- **Comentários úteis**: Apenas onde lógica não é óbvia
+- **Descriptive names**: `PasswordCrackerProvider`, `AttackExecutionScreen`
+- **Small functions**: Each method has clear responsibility
+- **No hardcodes**: Constants in `AppColors`, `AppTextStyles`
+- **Clear organization**: core → features → screens/widgets
+- **Useful comments**: Only where logic isn't obvious
 
 ---
 
-## 📦 Dependências
+## 📦 Dependencies
 
-| Pacote | Propósito |
-|--------|-----------|
+| Package | Purpose |
+|---------|---------|
 | `provider` | State Management (ChangeNotifier) |
-| `google_fonts` | Tipografia (Inter, JetBrains Mono) |
-| `file_picker` | Seletor de arquivo nativo |
-| `path_provider` | Acesso a diretórios do sistema |
-| `intl` | Formatação de números intl |
-| `gap` | Widget de espaçamento (alternativa a SizedBox) |
-| `percent_indicator` | Indicadores de progresso customizados |
+| `google_fonts` | Typography (Inter, JetBrains Mono) |
+| `file_picker` | Native file selector |
+| `path_provider` | System directory access |
+| `intl` | Number formatting |
+| `gap` | Spacing widget (alternative to SizedBox) |
+| `percent_indicator` | Custom progress indicators |
 
 ---
 
-## 🚀 Como Usar
+## 🚀 How to Use
 
-### Consumindo State
+### Consuming State
 
 ```dart
-// Ler estado
+// Read state
 context.watch<PasswordCrackerProvider>().loadedFile
 
-// Modificar estado
+// Modify state
 context.read<PasswordCrackerProvider>().setLoadedFile(file)
 
-// Consumer pattern (mais eficiente)
+// Consumer pattern (more efficient)
 Consumer<PasswordCrackerProvider>(
   builder: (context, provider, _) {
-    return Text(provider.loadedFile?.name ?? 'Nenhum arquivo');
+    return Text(provider.loadedFile?.name ?? 'No file');
   },
 )
 ```
 
-### Adicionando Nova Tela
+### Adding a New Screen
 
-1. Criar `lib/features/password_cracker/presentation/screens/nova_screen.dart`
-2. Estender `StatelessWidget` ou `StatefulWidget`
-3. Usar `AppColors`, `AppTextStyles`, e widgets tecados
-4. Atualizar `AppRouter` com nova lógica de roteamento
+1. Create `lib/features/password_cracker/presentation/screens/new_screen.dart`
+2. Extend `StatelessWidget` or `StatefulWidget`
+3. Use `AppColors`, `AppTextStyles`, and tech widgets
+4. Update `AppRouter` with new routing logic
 
-### Adicionando Novo Widget
+### Adding a New Widget
 
-1. Criar em `lib/features/password_cracker/presentation/widgets/`
-2. Seguir padrão de nomeação: `<Descricao>Widget`
-3. Aceitar props customizáveis (cores, ações, etc)
-4. Usar `TechCard` como base para consistência
-
----
-
-## 🔧 Próximas Melhorias
-
-- [ ] Integrar com Rust via FFI (atualmente simulado)
-- [ ] Persistência de configurações (SharedPreferences)
-- [ ] Testes unitários para `AppFormatters`, `AppValidators`
-- [ ] Testes de widget para screens
-- [ ] Logging estruturado
-- [ ] Animações mais elaboradas
-- [ ] Suporte a múltiplos idiomas (i18n)
-- [ ] Migrar para Riverpod (se necessário escalabilidade)
+1. Create in `lib/features/password_cracker/presentation/widgets/`
+2. Follow naming pattern: `<Description>Widget`
+3. Accept customizable props (colors, actions, etc)
+4. Use `TechCard` as base for consistency
 
 ---
 
-## 📚 Recursos
+## � Rust Password Cracker Module
+
+### Core Algorithm: `password_cracker.rs`
+
+Implements a password cracking system in three phases:
+
+#### Phase 1: Fast Validation (Fast Path)
+- Uses ZipCrypto algorithm for 12-byte header validation
+- Calculates encryption keys and verifies check byte
+- ~1/256 false positive rate
+- **Speed**: ~1 million tests per second
+- **Zero allocations**: Pre-computed CRC32 table
+
+#### Phase 2: Complete Verification (Full Verification)
+- Decompresses ZIP file with candidate password
+- Verifies CRC32 integrity of content
+- Eliminates false positives from fast path
+- **Cost**: ~100x slower than fast path, but rare
+
+#### Phase 3: Parallelization (Rayon)
+- **Dictionary attack**: Processes 1MB chunks in parallel
+- **Brute force**: Generates and tests passwords in 65K chunks per thread
+- **Work stealing**: Rayon auto-balances across cores
+- **Atomic locks**: Relaxed ordering to minimize contention
+
+### Data Structures
+
+```rust
+// Attack configuration
+struct CrackConfig {
+    min_length: usize,
+    max_length: usize,
+    use_lowercase: bool,
+    use_uppercase: bool,
+    use_numbers: bool,
+    use_symbols: bool,
+    use_dictionary: bool,
+    custom_words: Vec<String>,
+}
+
+// Real-time progress
+struct CrackProgress {
+    attempts: u64,              // Total attempts
+    current_password: String,   // Last tested password
+    elapsed_seconds: u64,       // Elapsed time
+    passwords_per_second: f64,  // Speed
+    phase: String,              // "Dictionary", "Running", "Done", "Error"
+}
+
+// Efficient charset storage
+struct CharacterSet {
+    data: [u8; 94],  // Fixed-size, stack-allocated
+    len: usize,      // Current number of chars
+}
+```
+
+### Control Features
+
+**Global Pause/Resume**:
+```rust
+static PAUSE_FLAG: OnceLock<Arc<AtomicBool>> = OnceLock::new();
+
+pub fn set_pause(paused: bool) {
+    get_pause_flag().store(paused, Ordering::Relaxed);
+}
+
+fn wait_if_paused() {
+    // Check every 50ms without blocking threads
+    while pause_flag.load(Ordering::Relaxed) {
+        sleep(50ms);
+    }
+}
+```
+
+### Real-Time Progress
+- Separate thread for reporting (doesn't block workers)
+- Updates UI every 500ms
+- Dynamically calculates speed (passwords/second)
+
+---
+
+## 🧠 Design Decisions
+
+### Why Rust?
+- **Critical performance**: 20-50K+ passwords/second vs ~1-5K in Dart/Flutter
+- **Memory control**: Zero allocations in hot paths
+- **Parallelization**: Rayon automatic across cores without GC pauses
+- **Optimized CRC32**: Inlining = ~1M ops/sec per thread
+
+### Why Rayon?
+- **Data parallelism**: Automatic `par_iter()`
+- **Work stealing**: Dynamically balances across cores
+- **Zero unsafe**: Safe by default
+- **Scope threads**: Deadlock-free synchronization
+
+### Two-Phase Validation
+- **Fast path (~1/256)**: Rejects 99.6% quickly
+- **Full path**: Decompresses only for few finalists
+- **Gain**: ~100x faster than decompressing everything
+
+---
+
+## 🔧 Next Improvements
+
+- [ ] AES-256 support (not just ZipCrypto)
+- [ ] GPU acceleration (Metal/Vulkan)
+- [ ] Custom wordlist upload
+- [ ] Batch processing
+- [ ] Attack session persistence
+- [ ] Unit tests (AppFormatters, AppValidators)
+- [ ] Widget tests
+- [ ] Structured logging
+- [ ] i18n support
+- [ ] Elaborate animations
+
+---
+
+## 📚 Resources
 
 - [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 - [SOLID Principles](https://en.wikipedia.org/wiki/SOLID)
 - [Flutter Best Practices](https://flutter.dev/docs/testing/best-practices)
 - [Material Design 3](https://m3.material.io/)
+- [ZipCrypto Specification](https://en.wikipedia.org/wiki/Zip_(file_format)#Encryption)
+- [Rayon Documentation](https://docs.rs/rayon/)
 
 ---
 
-**Desenvolvido com ❤️ e ☕ + Rust**
+**Developed with ❤️ and ☕ + Rust**

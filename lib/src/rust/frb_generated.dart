@@ -64,7 +64,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => -307921758;
+  int get rustContentHash => 968857970;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -75,16 +75,9 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 }
 
 abstract class RustLibApi extends BaseApi {
-  Future<CrackConfig> crateApiPasswordCrackerCrackConfigDefault();
-
   Stream<CrackProgress> crateApiPasswordCrackerCrackZipPassword({
     required List<int> fileBytes,
     required CrackConfig config,
-  });
-
-  String crateApiPasswordCrackerDebugPasswordTest({
-    required List<int> fileBytes,
-    required String password,
   });
 
   Future<BigInt> crateApiPasswordCrackerEstimateCombinations({
@@ -95,12 +88,7 @@ abstract class RustLibApi extends BaseApi {
 
   Future<void> crateApiPasswordCrackerSetPause({required bool paused});
 
-  String crateApiPasswordCrackerTestSpecificPassword({
-    required List<int> fileBytes,
-    required String password,
-  });
-
-  bool crateApiPasswordCrackerTestZipPassword({
+  Future<bool> crateApiPasswordCrackerTestZipPassword({
     required List<int> fileBytes,
     required String password,
   });
@@ -113,33 +101,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     required super.generalizedFrbRustBinding,
     required super.portManager,
   });
-
-  @override
-  Future<CrackConfig> crateApiPasswordCrackerCrackConfigDefault() {
-    return handler.executeNormal(
-      NormalTask(
-        callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 1,
-            port: port_,
-          );
-        },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_crack_config,
-          decodeErrorData: null,
-        ),
-        constMeta: kCrateApiPasswordCrackerCrackConfigDefaultConstMeta,
-        argValues: [],
-        apiImpl: this,
-      ),
-    );
-  }
-
-  TaskConstMeta get kCrateApiPasswordCrackerCrackConfigDefaultConstMeta =>
-      const TaskConstMeta(debugName: "crack_config_default", argNames: []);
 
   @override
   Stream<CrackProgress> crateApiPasswordCrackerCrackZipPassword({
@@ -158,7 +119,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 2,
+              funcId: 1,
               port: port_,
             );
           },
@@ -182,36 +143,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  String crateApiPasswordCrackerDebugPasswordTest({
-    required List<int> fileBytes,
-    required String password,
-  }) {
-    return handler.executeSync(
-      SyncTask(
-        callFfi: () {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_list_prim_u_8_loose(fileBytes, serializer);
-          sse_encode_String(password, serializer);
-          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 3)!;
-        },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: null,
-        ),
-        constMeta: kCrateApiPasswordCrackerDebugPasswordTestConstMeta,
-        argValues: [fileBytes, password],
-        apiImpl: this,
-      ),
-    );
-  }
-
-  TaskConstMeta get kCrateApiPasswordCrackerDebugPasswordTestConstMeta =>
-      const TaskConstMeta(
-        debugName: "debug_password_test",
-        argNames: ["fileBytes", "password"],
-      );
-
-  @override
   Future<BigInt> crateApiPasswordCrackerEstimateCombinations({
     required CrackConfig config,
   }) {
@@ -223,13 +154,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 4,
+            funcId: 2,
             port: port_,
           );
         },
         codec: SseCodec(
           decodeSuccessData: sse_decode_u_64,
-          decodeErrorData: null,
+          decodeErrorData: sse_decode_AnyhowException,
         ),
         constMeta: kCrateApiPasswordCrackerEstimateCombinationsConstMeta,
         argValues: [config],
@@ -253,7 +184,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 5,
+            funcId: 3,
             port: port_,
           );
         },
@@ -281,7 +212,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 6,
+            funcId: 4,
             port: port_,
           );
         },
@@ -300,51 +231,26 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       const TaskConstMeta(debugName: "set_pause", argNames: ["paused"]);
 
   @override
-  String crateApiPasswordCrackerTestSpecificPassword({
+  Future<bool> crateApiPasswordCrackerTestZipPassword({
     required List<int> fileBytes,
     required String password,
   }) {
-    return handler.executeSync(
-      SyncTask(
-        callFfi: () {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
           final serializer = SseSerializer(generalizedFrbRustBinding);
           sse_encode_list_prim_u_8_loose(fileBytes, serializer);
           sse_encode_String(password, serializer);
-          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 7)!;
-        },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: null,
-        ),
-        constMeta: kCrateApiPasswordCrackerTestSpecificPasswordConstMeta,
-        argValues: [fileBytes, password],
-        apiImpl: this,
-      ),
-    );
-  }
-
-  TaskConstMeta get kCrateApiPasswordCrackerTestSpecificPasswordConstMeta =>
-      const TaskConstMeta(
-        debugName: "test_specific_password",
-        argNames: ["fileBytes", "password"],
-      );
-
-  @override
-  bool crateApiPasswordCrackerTestZipPassword({
-    required List<int> fileBytes,
-    required String password,
-  }) {
-    return handler.executeSync(
-      SyncTask(
-        callFfi: () {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_list_prim_u_8_loose(fileBytes, serializer);
-          sse_encode_String(password, serializer);
-          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 8)!;
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 5,
+            port: port_,
+          );
         },
         codec: SseCodec(
           decodeSuccessData: sse_decode_bool,
-          decodeErrorData: null,
+          decodeErrorData: sse_decode_AnyhowException,
         ),
         constMeta: kCrateApiPasswordCrackerTestZipPasswordConstMeta,
         argValues: [fileBytes, password],

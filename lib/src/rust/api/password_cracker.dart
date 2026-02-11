@@ -6,21 +6,65 @@
 import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-// These functions are ignored because they are not marked as `pub`: `adaptive_chunk_size`, `as_slice`, `build_charset`, `dictionary_attack`, `ensure_valid_zip`, `find_first_encrypted_entry`, `generate_mutations`, `get_pause_flag`, `increment_password`, `index_to_bytes`, `is_empty`, `new`, `report_error`, `report_progress`, `spawn_progress_thread`, `try_unlock_fast`, `try_unlock_ultra_safe`, `try_unlock`, `wait_if_paused`
-// These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `CompactCharset`, `CrackResult`
+// These functions are ignored because they are not marked as `pub`: `advance_password`, `attempt_brute_force`, `attempt_dictionary_attack`, `chars`, `define_crc32_table`, `get_pause_flag`, `index_to_password`, `locate_zip_crypto_header`, `new`, `report_progress_error`, `send_success`, `spawn_progress_reporter`, `update_crypto_keys`, `validate_password_header`, `verify_password_integrity`, `wait_if_paused`
+// These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `CharacterSet`, `CryptoHeader`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `fmt`, `fmt`, `fmt`
 
-/// Sets the pause state globally
+/// Pauses or resumes the cracking operation.
 Future<void> setPause({required bool paused}) =>
     RustLib.instance.api.crateApiPasswordCrackerSetPause(paused: paused);
 
-/// Gets the current pause state
+/// Returns whether the cracking operation is currently paused.
 Future<bool> isPaused() =>
     RustLib.instance.api.crateApiPasswordCrackerIsPaused();
 
-/// Quebra a senha de um arquivo ZIP usando força bruta paralela otimizada v2
-/// Fase 1: Dictionary attack (senhas comuns + mutações)
-/// Fase 2: Brute force incremental com chunks adaptativos
+/// Tests a single password against a ZIP file using fast header validation.
+///
+/// # Arguments
+/// * `file_bytes` - Raw ZIP file contents
+/// * `password` - Password to test
+///
+/// # Returns
+/// * `Ok(true)` if the password is valid
+/// * `Ok(false)` if the password is invalid
+/// * `Err` if the ZIP file is malformed or uses unsupported encryption
+Future<bool> testZipPassword({
+  required List<int> fileBytes,
+  required String password,
+}) => RustLib.instance.api.crateApiPasswordCrackerTestZipPassword(
+  fileBytes: fileBytes,
+  password: password,
+);
+
+/// Estimates the total number of possible password combinations given a config.
+///
+/// # Arguments
+/// * `config` - Password generation configuration
+///
+/// # Returns
+/// The total number of possible combinations, with overflow protection.
+Future<BigInt> estimateCombinations({required CrackConfig config}) => RustLib
+    .instance
+    .api
+    .crateApiPasswordCrackerEstimateCombinations(config: config);
+
+/// Attempts to crack a ZIP password using dictionary and brute force attacks.
+///
+/// This function employs a two-phase approach:
+/// 1. **Dictionary Attack**: Tests a built-in password dictionary (RockYou.txt) in parallel
+/// 2. **Brute Force**: Systematically generates and tests passwords of increasing length
+///
+/// Each candidate is validated using a fast header check, then confirmed with full
+/// decompression to eliminate false positives. Progress is reported via a stream sink.
+///
+/// # Arguments
+/// * `file_bytes` - Raw ZIP file contents
+/// * `config` - Password generation and attack configuration
+/// * `progress_sink` - Stream for reporting progress updates
+///
+/// # Returns
+/// * `Ok(())` when the operation completes (password found or exhausted)
+/// * `Err` if the ZIP file is malformed or uses unsupported encryption
 Stream<CrackProgress> crackZipPassword({
   required List<int> fileBytes,
   required CrackConfig config,
@@ -29,48 +73,30 @@ Stream<CrackProgress> crackZipPassword({
   config: config,
 );
 
-/// Estima o número total de combinações
-Future<BigInt> estimateCombinations({required CrackConfig config}) => RustLib
-    .instance
-    .api
-    .crateApiPasswordCrackerEstimateCombinations(config: config);
-
-/// Debug function to test a specific password and see what happens
-String debugPasswordTest({
-  required List<int> fileBytes,
-  required String password,
-}) => RustLib.instance.api.crateApiPasswordCrackerDebugPasswordTest(
-  fileBytes: fileBytes,
-  password: password,
-);
-
-/// Versão simplificada para testes (síncrona)
-bool testZipPassword({
-  required List<int> fileBytes,
-  required String password,
-}) => RustLib.instance.api.crateApiPasswordCrackerTestZipPassword(
-  fileBytes: fileBytes,
-  password: password,
-);
-
-/// Test a specific password and get detailed results
-String testSpecificPassword({
-  required List<int> fileBytes,
-  required String password,
-}) => RustLib.instance.api.crateApiPasswordCrackerTestSpecificPassword(
-  fileBytes: fileBytes,
-  password: password,
-);
-
-/// Configuração para a quebra de senha
+/// Configuration for password cracking operations.
 class CrackConfig {
+  /// Minimum length for generated passwords.
   final BigInt minLength;
+
+  /// Maximum length for generated passwords.
   final BigInt maxLength;
+
+  /// Include lowercase letters in character set.
   final bool useLowercase;
+
+  /// Include uppercase letters in character set.
   final bool useUppercase;
+
+  /// Include digits in character set.
   final bool useNumbers;
+
+  /// Include special symbols in character set.
   final bool useSymbols;
+
+  /// Use dictionary attack before brute force.
   final bool useDictionary;
+
+  /// Custom words to include in dictionary attack.
   final List<String> customWords;
 
   const CrackConfig({
@@ -83,9 +109,6 @@ class CrackConfig {
     required this.useDictionary,
     required this.customWords,
   });
-
-  static Future<CrackConfig> default_() =>
-      RustLib.instance.api.crateApiPasswordCrackerCrackConfigDefault();
 
   @override
   int get hashCode =>
@@ -113,12 +136,21 @@ class CrackConfig {
           customWords == other.customWords;
 }
 
-/// Representa o progresso da quebra de senha
+/// Represents the current progress of a cracking operation.
 class CrackProgress {
+  /// Total password attempts made so far.
   final BigInt attempts;
+
+  /// The most recently tested password.
   final String currentPassword;
+
+  /// Elapsed time in seconds since the operation started.
   final BigInt elapsedSeconds;
+
+  /// Estimated passwords tested per second.
   final double passwordsPerSecond;
+
+  /// Current phase of the operation (e.g., "Dictionary", "Running", "Done").
   final String phase;
 
   const CrackProgress({
