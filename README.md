@@ -27,18 +27,22 @@
 
 ## ⚠️ Platform Compatibility
 
-**This project is primarily developed and tested on macOS.**
+**This project is primarily developed and tested on macOS and iOS.**
 
-While the codebase includes platform-specific directories for Android, iOS, Linux, and Windows, **only macOS has been heavily tested and validated**. If you run this application on other platforms, you may encounter:
+While the codebase includes platform-specific directories for Android, Linux, and Windows, **only macOS and iOS have been tested and validated**. If you run this application on other platforms, you may encounter:
 
 - Build or compilation issues
 - Runtime errors or crashes
 - Performance degradation
 - Missing platform-specific features or integrations
 
+**Tested Platforms:**
+- ✅ **macOS** - Fully tested and working
+- ✅ **iOS Simulator** - Tested and working
+
 **Recommendations:**
-- For the best experience, use **macOS**
-- Other platforms may require additional configuration or debugging
+- For the best experience, use **macOS or iOS**
+- Other platforms (Android, Linux, Windows) may require additional configuration or debugging
 - Community contributions for other platform support are welcome!
 
 ## 🏗️ Architecture
@@ -76,7 +80,7 @@ rapid_crak/
 - Rust toolchain 1.70+
 - Cargo
 - flutter_rust_bridge CLI
-- **macOS** (recommended and tested platform)
+- **macOS or iOS** (tested platforms)
 
 ### Setup
 
@@ -98,7 +102,7 @@ flutter_rust_bridge_codegen generate
 flutter run -d macos
 ```
 
-> **Note:** While setup instructions for other platforms exist below, they have not been extensively tested. Proceed with caution on non-macOS systems.
+> **Note:** While setup instructions for other platforms exist below, only macOS and iOS have been tested. Proceed with caution on Android, Linux, and Windows.
 
 ## � How to Run
 
@@ -146,32 +150,32 @@ Or use the configured VS Code task:
 
 #### Step 3: Select Target Platform
 When launching, choose your target platform:
-- `macos` - **macOS (Primary & Tested Platform)**
-- `ios` - iOS device or simulator ⚠️ *Limited testing*
-- `android` - Android device or emulator ⚠️ *Limited testing*
-- `web` - Web browser ⚠️ *Limited testing*
-- `linux` - Linux desktop ⚠️ *Limited testing*
-- `windows` - Windows desktop ⚠️ *Limited testing*
+- `macos` - **macOS (✅ Tested)**
+- `ios` - **iOS device or simulator (✅ Tested)**
+- `android` - Android device or emulator ⚠️ *Not tested*
+- `web` - Web browser ⚠️ *Not tested*
+- `linux` - Linux desktop ⚠️ *Not tested*
+- `windows` - Windows desktop ⚠️ *Not tested*
 
-> **Important:** Only macOS has been heavily tested. Other platforms may have compatibility issues.
+> **Important:** Only macOS and iOS have been tested. Other platforms may have compatibility issues.
 
-#### Example: Run on macOS (Recommended)
+#### Example: Run on macOS (Tested)
 ```bash
 flutter run -d macos
 ```
 
-#### Example: Run on iOS Simulator (Untested)
+#### Example: Run on iOS Simulator (Tested)
 ```bash
-# Use at your own risk
 flutter run -d "iPhone 15"
 ```
 
 ### Running from Terminal
 
-#### Full Setup (First Time - macOS)
+#### Full Setup (First Time - macOS/iOS)
 ```bash
-# 1. Install Rust dependencies for macOS
-rustup target add aarch64-apple-darwin x86_64-apple-darwin
+# 1. Install Rust dependencies for Apple platforms
+rustup target add aarch64-apple-darwin x86_64-apple-darwin  # macOS
+rustup target add aarch64-apple-ios x86_64-apple-ios        # iOS
 
 # 2. Install Flutter dependencies
 flutter pub get
@@ -179,11 +183,13 @@ flutter pub get
 # 3. Generate Rust bindings
 flutter_rust_bridge_codegen generate
 
-# 4. Run the app on macOS
-flutter run -d macos
+# 4. Run the app
+flutter run -d macos      # macOS
+# or
+flutter run -d "iPhone 15"  # iOS Simulator
 ```
 
-#### For Other Platforms (⚠️ Not Heavily Tested)
+#### For Other Platforms (⚠️ Not Tested)
 ```bash
 # Linux (use at your own risk)
 rustup target add aarch64-linux-gnu
@@ -293,7 +299,7 @@ unzip -l test_password.zip
 
 ## 📊 Performance Benchmarks
 
-> **Note:** Benchmarks below are estimates. Actual performance heavily tested and validated only on **macOS**. Other platforms may show different results.
+> **Note:** Benchmarks below are estimates based on testing on **macOS and iOS**. Other platforms may show different results.
 
 ### Example Apple Silicon Mac (M1/M2)
 
