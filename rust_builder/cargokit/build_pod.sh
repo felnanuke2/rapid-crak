@@ -49,6 +49,11 @@ do
   fi
 done
 
+# Set RUSTFLAGS for optimization
+# Note: target-cpu=native causes issues with cross-compilation
+# Let Cargo use its default optimizations with the release profile
+export RUSTFLAGS="-C opt-level=3"
+
 sh "$BASEDIR/run_build_tool.sh" build-pod "$@"
 
 # Make a symlink from built framework to phony file, which will be used as input to

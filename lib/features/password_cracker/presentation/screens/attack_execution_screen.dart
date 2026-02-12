@@ -32,49 +32,12 @@ class _AttackExecutionScreenState
       duration: const Duration(milliseconds: 1500),
       vsync: this,
     )..repeat();
-
-    // Simula atualização de estatísticas (remove em produção)
-    _simulateStats();
   }
 
   @override
   void dispose() {
     _pulseController.dispose();
     super.dispose();
-  }
-
-  void _simulateStats() {
-    // Em produção, isso viria do Rust via FFI/Bridge
-    // Por agora, vamos simular atualizações
-    Future.delayed(const Duration(seconds: 2), () {
-      if (mounted &&
-          context.read<PasswordCrackerProvider>().isAttackRunning) {
-        final stats = context
-            .read<PasswordCrackerProvider>()
-            .currentStats;
-
-        if (stats != null) {
-          final newStats = stats.copyWith(
-            attemptedCount: stats.attemptedCount + 500000,
-            passwordsPerSecond: 1500000,
-            elapsedTime: stats.elapsedTime + const Duration(seconds: 1),
-            lastTestedPassword:
-                'password${DateTime.now().millisecond}',
-          );
-
-          context
-              .read<PasswordCrackerProvider>()
-              .updateAttackStats(newStats);
-
-          _lastPasswords.insert(0, newStats.lastTestedPassword ?? 'N/A');
-          if (_lastPasswords.length > 5) {
-            _lastPasswords.removeLast();
-          }
-
-          _simulateStats();
-        }
-      }
-    });
   }
 
   @override
@@ -118,6 +81,16 @@ class _AttackExecutionScreenState
       body: Consumer<PasswordCrackerProvider>(
         builder: (context, provider, _) {
           final stats = provider.currentStats;
+
+          // Update password log with real data from Rust
+          if (stats?.lastTestedPassword != null && 
+              stats!.lastTestedPassword!.isNotEmpty &&
+              (_lastPasswords.isEmpty || _lastPasswords.first != stats.lastTestedPassword)) {
+            _lastPasswords.insert(0, stats.lastTestedPassword!);
+            if (_lastPasswords.length > 5) {
+              _lastPasswords.removeLast();
+            }
+          }
 
           if (stats == null) {
             return Center(

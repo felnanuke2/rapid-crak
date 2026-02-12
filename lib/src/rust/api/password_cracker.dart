@@ -6,7 +6,7 @@
 import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-// These functions are ignored because they are not marked as `pub`: `advance_indices_and_buffer`, `advance_indices`, `advance_password`, `attempt_brute_force`, `attempt_dictionary_attack`, `chars`, `define_crc32_table`, `get_pause_flag`, `index_to_indices`, `index_to_password`, `locate_zip_crypto_header`, `new`, `report_progress_error`, `send_success`, `spawn_progress_reporter`, `update_crypto_keys`, `validate_password_header`, `verify_password_integrity`, `wait_if_paused`
+// These functions are ignored because they are not marked as `pub`: `advance_password`, `attempt_brute_force`, `attempt_dictionary_attack`, `chars`, `define_crc32_table`, `get_pause_flag`, `index_to_password`, `locate_zip_crypto_header`, `new`, `report_progress_error`, `send_success`, `spawn_progress_reporter`, `update_crypto_keys`, `validate_password_header`, `verify_password_integrity`, `wait_if_paused`
 // These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `CharacterSet`, `CryptoHeader`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `fmt`, `fmt`, `fmt`
 

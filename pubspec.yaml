@@ -1,4 +1,4 @@
-name: rapid-crak
+name: bruteforce_doc_break
 description: "A high-performance document password cracking tool built with Flutter and Rust."
 version: 1.0.0+1
 publish_to: 'none'

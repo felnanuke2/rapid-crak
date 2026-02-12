@@ -27,5 +27,16 @@ crc32fast = "1.5.0"
 # Optional: Memory-mapped file handling for large files
 memmap2 = "0.9"
 
+[profile.release]
+# Aggressive optimizations for maximum performance
+opt-level = 3          # Maximum optimization
+lto = "fat"            # Link-time optimization across all crates
+codegen-units = 1      # Single codegen unit for better optimization
+strip = true           # Strip debug symbols to reduce binary size
+panic = "abort"        # Abort on panic for smaller binary and faster code
+
+[profile.release.package."*"]
+opt-level = 3
+
 [lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = ['cfg(frb_expand)'] }

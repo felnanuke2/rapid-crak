@@ -423,7 +423,11 @@ fn attempt_dictionary_attack(
     current_sample: &Arc<std::sync::RwLock<String>>,
     progress_sink: &StreamSink<CrackProgress>,
 ) -> Option<String> {
-    const DICTIONARY_CHUNK_SIZE: usize = 1024 * 1024; // 1MB chunks
+    // Smaller chunks for better load balancing across CPU cores
+    const DICTIONARY_CHUNK_SIZE: usize = 64 * 1024; // 64KB chunks for better parallelism
+    // Batch processing to reduce atomic operations
+    const BATCH_SIZE: usize = 256;
+    // Update progress frequently enough for responsive UI
     const PROGRESS_UPDATE_INTERVAL: u64 = 20000;
 
     let _ = progress_sink.add(CrackProgress {
@@ -435,48 +439,76 @@ fn attempt_dictionary_attack(
     });
 
     const ROCKYOU_BYTES: &[u8] = include_bytes!("rockyou.txt");
+    let progress_thread = spawn_progress_reporter(
+        Arc::clone(attempts),
+        Arc::clone(found),
+        Arc::clone(current_sample),
+        progress_sink.clone(),
+    );
     let chunks: Vec<&[u8]> = ROCKYOU_BYTES.chunks(DICTIONARY_CHUNK_SIZE).collect();
 
-    chunks.into_par_iter().find_map_any(|chunk| {
+    let found_password = chunks.into_par_iter().find_map_any(|chunk| {
         let mut remaining = chunk;
         let mut local_count = 0u64;
+        let mut batch_counter = 0usize;
 
         while let Some(newline_pos) = remaining.iter().position(|&b| b == b'\n') {
-            if found.load(Ordering::Relaxed) {
-                return None;
+            // Check found flag only every BATCH_SIZE iterations
+            batch_counter += 1;
+            if batch_counter >= BATCH_SIZE {
+                batch_counter = 0;
+                if found.load(Ordering::Relaxed) {
+                    // Sync remaining local count before returning
+                    if local_count > 0 {
+                        attempts.fetch_add(local_count, Ordering::Relaxed);
+                    }
+                    return None;
+                }
             }
 
             let line = &remaining[..newline_pos];
             let pwd_bytes = line.strip_suffix(b"\r").unwrap_or(line);
-
-            // Fast path: header check
+            
+            // Fast path: header check (no allocations)
             if validate_password_header(header, pwd_bytes) {
+                // Only allocate string when we have a candidate
                 let candidate = String::from_utf8_lossy(pwd_bytes).to_string();
                 // Slow path: full verification
                 if verify_password_integrity(file_bytes, &candidate) {
                     found.store(true, Ordering::SeqCst);
+                    // Sync final count
+                    attempts.fetch_add(local_count + 1, Ordering::Relaxed);
                     return Some(candidate);
                 }
             }
 
             local_count += 1;
+            
+            // Reduce atomic operations by batching updates
             if local_count % PROGRESS_UPDATE_INTERVAL == 0 {
                 attempts.fetch_add(PROGRESS_UPDATE_INTERVAL, Ordering::Relaxed);
-                if let Ok(mut s) = current_sample.write() {
-                    *s = String::from_utf8_lossy(pwd_bytes).to_string();
+                local_count = 0;
+                // Update sample less frequently and only if lock is available
+                if let Ok(mut s) = current_sample.try_write() {
+                    // Reuse string buffer to avoid allocations
+                    s.clear();
+                    s.push_str(&String::from_utf8_lossy(pwd_bytes));
                 }
             }
 
             remaining = &remaining[newline_pos + 1..];
         }
 
-        let remainder = local_count % PROGRESS_UPDATE_INTERVAL;
-        if remainder > 0 {
-            attempts.fetch_add(remainder, Ordering::Relaxed);
+        // Sync any remaining count
+        if local_count > 0 {
+            attempts.fetch_add(local_count, Ordering::Relaxed);
         }
 
         None
-    })
+    });
+
+    let _ = progress_thread.join();
+    found_password
 }
 
 /// Performs a brute force attack on the ZIP file.
@@ -494,8 +526,8 @@ fn attempt_brute_force(
     start_time: std::time::Instant,
 ) -> Result<()> {
     const CHUNK_SIZE: u64 = 65536;
-    const CHECK_INTERVAL: u64 = 0x2710; // 10000 in hex
-    const PROGRESS_UPDATE_INTERVAL: u64 = 20000;
+    const CHECK_INTERVAL: u64 = 0x4000; // Check every 16384 iterations
+    const PROGRESS_UPDATE_INTERVAL: u64 = 500000; // Update progress very infrequently
 
     let charset = CharacterSet::new(config);
     let progress_thread = spawn_progress_reporter(
@@ -552,8 +584,10 @@ fn attempt_brute_force(
 
                 if local_attempts % PROGRESS_UPDATE_INTERVAL == 0 {
                     attempts.fetch_add(PROGRESS_UPDATE_INTERVAL, Ordering::Relaxed);
-                    if let Ok(mut s) = current_sample.write() {
-                        *s = String::from_utf8_lossy(&pwd_buffer).to_string();
+                    // Use try_write to avoid blocking if another thread has the lock
+                    if let Ok(mut s) = current_sample.try_write() {
+                        s.clear();
+                        s.push_str(&String::from_utf8_lossy(&pwd_buffer));
                     }
                 }
             }
@@ -592,23 +626,77 @@ fn validate_password_header(header: &CryptoHeader, password: &[u8]) -> bool {
     let mut k1 = 0x23456789u32;
     let mut k2 = 0x34567890u32;
 
-    // Update keys with password
-    for &byte in password {
-        update_crypto_keys(&mut k0, &mut k1, &mut k2, byte);
+    // Update keys with password - unrolled for common cases
+    let pwd_len = password.len();
+    let mut i = 0;
+    
+    // Process 4 bytes at a time when possible
+    while i + 4 <= pwd_len {
+        update_crypto_keys(&mut k0, &mut k1, &mut k2, password[i]);
+        update_crypto_keys(&mut k0, &mut k1, &mut k2, password[i + 1]);
+        update_crypto_keys(&mut k0, &mut k1, &mut k2, password[i + 2]);
+        update_crypto_keys(&mut k0, &mut k1, &mut k2, password[i + 3]);
+        i += 4;
+    }
+    
+    // Process remaining bytes
+    while i < pwd_len {
+        update_crypto_keys(&mut k0, &mut k1, &mut k2, password[i]);
+        i += 1;
     }
 
-    // Validate against stored header
-    for i in 0..11 {
-        let temp = (k2 | 2) & 0xFFFF;
-        let key_byte = ((temp.wrapping_mul(temp ^ 1)) >> 8) as u8;
-        let decrypted = header.header[i] ^ key_byte;
-        update_crypto_keys(&mut k0, &mut k1, &mut k2, decrypted);
-    }
+    // Validate against stored header - unrolled
+    let h = &header.header;
+    
+    // Process pairs for better instruction pipelining
+    let temp = (k2 | 2) & 0xFFFF;
+    let key_byte = ((temp.wrapping_mul(temp ^ 1)) >> 8) as u8;
+    update_crypto_keys(&mut k0, &mut k1, &mut k2, h[0] ^ key_byte);
+    
+    let temp = (k2 | 2) & 0xFFFF;
+    let key_byte = ((temp.wrapping_mul(temp ^ 1)) >> 8) as u8;
+    update_crypto_keys(&mut k0, &mut k1, &mut k2, h[1] ^ key_byte);
+    
+    let temp = (k2 | 2) & 0xFFFF;
+    let key_byte = ((temp.wrapping_mul(temp ^ 1)) >> 8) as u8;
+    update_crypto_keys(&mut k0, &mut k1, &mut k2, h[2] ^ key_byte);
+    
+    let temp = (k2 | 2) & 0xFFFF;
+    let key_byte = ((temp.wrapping_mul(temp ^ 1)) >> 8) as u8;
+    update_crypto_keys(&mut k0, &mut k1, &mut k2, h[3] ^ key_byte);
+    
+    let temp = (k2 | 2) & 0xFFFF;
+    let key_byte = ((temp.wrapping_mul(temp ^ 1)) >> 8) as u8;
+    update_crypto_keys(&mut k0, &mut k1, &mut k2, h[4] ^ key_byte);
+    
+    let temp = (k2 | 2) & 0xFFFF;
+    let key_byte = ((temp.wrapping_mul(temp ^ 1)) >> 8) as u8;
+    update_crypto_keys(&mut k0, &mut k1, &mut k2, h[5] ^ key_byte);
+    
+    let temp = (k2 | 2) & 0xFFFF;
+    let key_byte = ((temp.wrapping_mul(temp ^ 1)) >> 8) as u8;
+    update_crypto_keys(&mut k0, &mut k1, &mut k2, h[6] ^ key_byte);
+    
+    let temp = (k2 | 2) & 0xFFFF;
+    let key_byte = ((temp.wrapping_mul(temp ^ 1)) >> 8) as u8;
+    update_crypto_keys(&mut k0, &mut k1, &mut k2, h[7] ^ key_byte);
+    
+    let temp = (k2 | 2) & 0xFFFF;
+    let key_byte = ((temp.wrapping_mul(temp ^ 1)) >> 8) as u8;
+    update_crypto_keys(&mut k0, &mut k1, &mut k2, h[8] ^ key_byte);
+    
+    let temp = (k2 | 2) & 0xFFFF;
+    let key_byte = ((temp.wrapping_mul(temp ^ 1)) >> 8) as u8;
+    update_crypto_keys(&mut k0, &mut k1, &mut k2, h[9] ^ key_byte);
+    
+    let temp = (k2 | 2) & 0xFFFF;
+    let key_byte = ((temp.wrapping_mul(temp ^ 1)) >> 8) as u8;
+    update_crypto_keys(&mut k0, &mut k1, &mut k2, h[10] ^ key_byte);
 
     // Final check byte
     let temp = (k2 | 2) & 0xFFFF;
     let key_byte = ((temp.wrapping_mul(temp ^ 1)) >> 8) as u8;
-    (header.header[11] ^ key_byte) == header.check_byte
+    (h[11] ^ key_byte) == header.check_byte
 }
 
 /// Updates the ZipCrypto internal keys for one byte.
@@ -617,10 +705,14 @@ fn validate_password_header(header: &CryptoHeader, password: &[u8]) -> bool {
 /// and 32-bit arithmetic operations.
 #[inline(always)]
 fn update_crypto_keys(k0: &mut u32, k1: &mut u32, k2: &mut u32, byte: u8) {
+    // The compiler will optimize these table lookups and eliminate bounds checks
     let index0 = ((*k0 ^ byte as u32) & 0xFF) as usize;
     *k0 = (*k0 >> 8) ^ CRC32_TABLE[index0];
-    *k1 = k1.wrapping_add(*k0 as u8 as u32);
+    
+    let k0_byte = *k0 as u8;
+    *k1 = k1.wrapping_add(k0_byte as u32);
     *k1 = k1.wrapping_mul(134775813).wrapping_add(1);
+    
     let index2 = ((*k2 ^ (*k1 >> 24)) & 0xFF) as usize;
     *k2 = (*k2 >> 8) ^ CRC32_TABLE[index2];
 }
