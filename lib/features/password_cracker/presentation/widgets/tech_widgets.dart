@@ -4,7 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../generated_l10n/app_localizations.dart';
 
-/// Botão primário grande (CTA - Call To Action)
+/// Large primary button (CTA - Call To Action).
 class PrimaryActionButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
@@ -71,7 +71,7 @@ class PrimaryActionButton extends StatelessWidget {
   }
 }
 
-/// Botão secundário/outline
+/// Secondary/outline button.
 class SecondaryButton extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;
@@ -112,7 +112,7 @@ class SecondaryButton extends StatelessWidget {
   }
 }
 
-/// Cartão com borda Rust
+/// Card with Rust-style border.
 class TechCard extends StatelessWidget {
   final Widget child;
   final EdgeInsets padding;
@@ -151,7 +151,7 @@ class TechCard extends StatelessWidget {
   }
 }
 
-/// Card para exibir número grande (estatísticas)
+/// Card for displaying large numbers (stats).
 class StatCard extends StatelessWidget {
   final String label;
   final String value;
@@ -200,7 +200,7 @@ class StatCard extends StatelessWidget {
   }
 }
 
-/// Exibidor de código/senha com fonte mono
+/// Code/password display with monospace font.
 class CodeDisplay extends StatelessWidget {
   final String code;
   final bool selectable;
@@ -259,7 +259,7 @@ class CodeDisplay extends StatelessWidget {
   }
 }
 
-/// Seletor de estratégia com chips
+/// Strategy selector with chips.
 class StrategySelector extends StatelessWidget {
   final bool numbers;
   final bool lowercase;
@@ -338,7 +338,7 @@ class StrategySelector extends StatelessWidget {
   }
 }
 
-/// Slider para comprimento de senha
+/// Password length slider.
 class PasswordLengthSlider extends StatelessWidget {
   final int minLength;
   final int maxLength;
@@ -411,7 +411,7 @@ class PasswordLengthSlider extends StatelessWidget {
   }
 }
 
-/// Indicador de progresso indeterminado (estilo hacker)
+/// Indeterminate progress indicator (hacker style).
 class TechProgressIndicator extends StatelessWidget {
   final String label;
   final double size;
@@ -433,7 +433,7 @@ class TechProgressIndicator extends StatelessWidget {
           child: Stack(
             alignment: Alignment.center,
             children: [
-              // Círculo externo (estático)
+              // Outer circle (static).
               Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
@@ -443,7 +443,7 @@ class TechProgressIndicator extends StatelessWidget {
                   ),
                 ),
               ),
-              // Círculo girando
+              // Spinning circle.
               SizedBox(
                 width: size,
                 height: size,

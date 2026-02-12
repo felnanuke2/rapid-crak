@@ -1,16 +1,16 @@
 import 'dart:typed_data' as typed_data;
 
-/// Estados possíveis do ataque de força bruta
+/// Possible states of the brute force attack.
 enum AttackState {
-  idle,       // Aguardando entrada
-  configuring,  // Usuário configurando ataque
-  running,    // Ataque em andamento
-  paused,     // Ataque pausado
-  completed,  // Ataque completado
-  error,      // Erro durante ataque
+  idle,       // Waiting for input.
+  configuring,  // User configuring the attack.
+  running,    // Attack running.
+  paused,     // Attack paused.
+  completed,  // Attack completed.
+  error,      // Error during attack.
 }
 
-/// Estratégia de força bruta (tipos de caracteres)
+/// Brute force strategy (character types).
 class CharacterStrategy {
   final bool numbers;        // 0-9
   final bool lowercase;      // a-z
@@ -24,7 +24,7 @@ class CharacterStrategy {
     required this.symbols,
   });
 
-  /// Retorna uma cópia com valores modificados
+  /// Returns a copy with modified values.
   CharacterStrategy copyWith({
     bool? numbers,
     bool? lowercase,
@@ -39,11 +39,11 @@ class CharacterStrategy {
     );
   }
 
-  /// Verifica se ao menos um tipo está selecionado
+  /// Checks whether at least one type is selected.
   bool get hasAtLeastOne =>
       numbers || lowercase || uppercase || symbols;
 
-  /// Conta quantos tipos estão selecionados
+  /// Counts how many types are selected.
   int get selectedCount =>
       (numbers ? 1 : 0) +
       (lowercase ? 1 : 0) +
@@ -54,7 +54,7 @@ class CharacterStrategy {
   String toString() => 'CharacterStrategy(numbers: $numbers, lowercase: $lowercase, uppercase: $uppercase, symbols: $symbols)';
 }
 
-/// Configuração do ataque de força bruta
+/// Brute force attack configuration.
 class AttackConfiguration {
   final int minLength;
   final int maxLength;
@@ -66,7 +66,7 @@ class AttackConfiguration {
     required this.strategy,
   });
 
-  /// Retorna cópia com valores modificados
+  /// Returns a copy with modified values.
   AttackConfiguration copyWith({
     int? minLength,
     int? maxLength,
@@ -79,14 +79,14 @@ class AttackConfiguration {
     );
   }
 
-  /// Valida se a configuração é válida
+  /// Validates whether the configuration is valid.
   bool get isValid =>
       minLength >= 1 &&
       maxLength <= 16 &&
       minLength <= maxLength &&
       strategy.hasAtLeastOne;
 
-  /// Estima complexidade (muito básico)
+  /// Estimates complexity (very basic).
   int get estimatedComplexity {
     int charCount = 0;
     if (strategy.numbers) charCount += 10;
@@ -101,13 +101,13 @@ class AttackConfiguration {
       'AttackConfiguration(minLength: $minLength, maxLength: $maxLength, strategy: $strategy)';
 }
 
-/// Metadados do arquivo carregado
+/// Loaded file metadata.
 class LoadedFile {
   final String path;
   final String name;
   final int sizeInBytes;
   final DateTime loadedAt;
-  final typed_data.Uint8List bytes; // Bytes do arquivo para passar ao Rust
+  final typed_data.Uint8List bytes; // File bytes to pass to Rust.
 
   LoadedFile({
     required this.path,
@@ -117,10 +117,10 @@ class LoadedFile {
     required this.bytes,
   });
 
-  // Alias para compatibilidade
+  // Alias for compatibility.
   int get sizeBytes => sizeInBytes;
 
-  /// Retorna tamanho formatado (ex: "15.5 MB")
+  /// Returns formatted size (e.g. "15.5 MB").
   String get formattedSize {
     const suffixes = ['B', 'KB', 'MB', 'GB'];
     if (sizeInBytes == 0) return '0 B';
@@ -132,7 +132,7 @@ class LoadedFile {
     return '${size.toStringAsFixed(2)} ${suffixes[index]}';
   }
 
-  /// Extrai extensão do arquivo
+  /// Extracts the file extension.
   String get extension => name.split('.').last.toLowerCase();
 
   @override
@@ -140,10 +140,10 @@ class LoadedFile {
       'LoadedFile(name: $name, size: $sizeInBytes, extension: $extension)';
 }
 
-/// Estatísticas de execução em tempo real
+/// Real-time execution stats.
 class AttackStats {
   final int attemptedCount;
-  final double passwordsPerSecond; // Alterado de int para double
+  final double passwordsPerSecond; // Changed from int to double.
   final Duration elapsedTime;
   final String? lastTestedPassword;
 
@@ -154,10 +154,10 @@ class AttackStats {
     this.lastTestedPassword,
   });
 
-  // Alias para compatibilidade com o código Rust
+  // Alias for compatibility with Rust code.
   String? get currentPassword => lastTestedPassword;
 
-  /// Retorna cópia com valores modificados
+  /// Returns a copy with modified values.
   AttackStats copyWith({
     int? attemptedCount,
     double? passwordsPerSecond,
@@ -177,7 +177,7 @@ class AttackStats {
       'AttackStats(attempts: $attemptedCount, speed: $passwordsPerSecond/s, elapsed: $elapsedTime)';
 }
 
-/// Resultado final do ataque
+/// Final attack result.
 class AttackResult {
   final bool success;
   final String? password;
@@ -193,7 +193,7 @@ class AttackResult {
     this.errorMessage,
   });
 
-  /// Verifica se é um erro
+  /// Checks if this is an error.
   bool get isError => !success && errorMessage != null;
 
   @override

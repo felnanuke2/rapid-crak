@@ -294,6 +294,7 @@ unzip -l test_password.zip
 
 ## 🔒 Security Notes
 
+- **Showcase only**: This project is for educational/demo purposes. Only use it on ZIP files you own or have explicit permission to test.
 - **ZipCrypto limitation**: Only supports traditional ZIP encryption (not AES)
 - **Dictionary attack**: Pre-loaded with common passwords (RockYou.txt)
 - **False positives**: ~1/256 rate from fast path, eliminated by full verification
@@ -302,7 +303,7 @@ unzip -l test_password.zip
 ## 🚀 Future Enhancements
 
 - [ ] AES encryption support
-- [ ] GPU acceleration (Metal/Vulkan)
+- [ ] GPU acceleration (Metal/Vulkan) — planned, not implemented yet
 - [ ] Cloud-based wordlist integration
 - [ ] Batch processing multiple files
 - [ ] Attack session persistence

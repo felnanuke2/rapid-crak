@@ -8,25 +8,25 @@ import '../../../../src/rust/api/password_cracker.dart' as rust;
 import '../../../../src/rust/frb_generated.dart';
 import '../../../../generated_l10n/app_localizations.dart';
 
-/// Serviço que conecta o Rust ao Flutter
-/// Gerencia a comunicação entre a lógica de força bruta (Rust) e a UI (Flutter)
+/// Service that connects Rust to Flutter.
+/// Manages communication between brute force logic (Rust) and the UI (Flutter).
 class RustPasswordCrackerService {
   static bool _initialized = false;
   static StreamSubscription<rust.CrackProgress>? _activeAttackSubscription;
 
-  /// Inicializa o Rust (deve ser chamado no início do app)
-  /// Seguro para chamar mesmo se RustLib.init() já foi chamado em main()
+  /// Initializes Rust (should be called at app startup).
+  /// Safe to call even if RustLib.init() was called in main().
   static Future<void> initialize() async {
     if (_initialized) return;
     try {
       await RustLib.init();
     } catch (_) {
-      // RustLib.init() já foi chamado em main(), ok
+      // RustLib.init() already called in main(), ok.
     }
     _initialized = true;
   }
 
-  /// Pausa a execução do ataque
+  /// Pauses attack execution.
   static Future<void> pauseAttack() async {
     try {
       await rust.setPause(paused: true);
@@ -37,7 +37,7 @@ class RustPasswordCrackerService {
     }
   }
 
-  /// Retoma a execução do ataque
+  /// Resumes attack execution.
   static Future<void> resumeAttack() async {
     try {
       await rust.setPause(paused: false);
@@ -48,7 +48,7 @@ class RustPasswordCrackerService {
     }
   }
 
-  /// Para a execução do ataque (cancela a execução completamente)
+  /// Stops attack execution (cancels it completely).
   static Future<void> stopAttack() async {
     try {
       // Cancel the active subscription to stop the Rust execution
@@ -61,8 +61,8 @@ class RustPasswordCrackerService {
     }
   }
 
-  /// Executa o ataque de força bruta
-  /// Stream de progresso em tempo real
+  /// Executes the brute force attack.
+  /// Real-time progress stream.
   static Future<void> executeAttack({
     required Uint8List fileBytes,
     required AttackConfiguration config,
@@ -76,7 +76,7 @@ class RustPasswordCrackerService {
     // Reset pause flag before starting
     rust.setPause(paused: false);
 
-    // Converte config Flutter -> Rust
+    // Converts Flutter config -> Rust.
     final rustConfig = rust.CrackConfig(
       minLength: BigInt.from(config.minLength),
       maxLength: BigInt.from(config.maxLength),
@@ -89,10 +89,10 @@ class RustPasswordCrackerService {
     );
 
     try {
-      // Inicia o ataque
+      // Starts the attack.
       provider.startAttack();
 
-      // Stream de progresso do Rust
+      // Rust progress stream.
       final progressStream = rust.crackZipPassword(
         fileBytes: fileBytes,
         config: rustConfig,
@@ -100,12 +100,12 @@ class RustPasswordCrackerService {
 
       rust.CrackProgress? lastProgress;
       
-      // Escuta o progresso em tempo real e armazena a subscription
+      // Listens to progress in real time and stores the subscription.
       _activeAttackSubscription = progressStream.listen(
         (progress) {
           lastProgress = progress;
           
-          // Atualiza stats na UI
+          // Updates stats in the UI.
           provider.updateAttackStats(AttackStats(
             attemptedCount: progress.attempts.toInt(),
             passwordsPerSecond: progress.passwordsPerSecond,
@@ -116,13 +116,13 @@ class RustPasswordCrackerService {
         onDone: () {
           _activeAttackSubscription = null;
           
-          // Stream terminou - mas precisamos pegar o resultado do Result<CrackResult>
-          // Por limitação do flutter_rust_bridge, o Result não vem no stream
-          // Vamos considerar que se o stream terminou, é porque acabou
-          // O lastProgress tem as informações finais
+          // Stream ended, but we need the Result<CrackResult> output.
+          // Due to flutter_rust_bridge limitations, the Result is not in the stream.
+          // If the stream ended, we assume the operation finished.
+          // lastProgress carries the final information.
           
           if (lastProgress != null) {
-            // Se a última senha testada foi bem-sucedida, ela estará em currentPassword
+            // If the last tested password was successful, it will be in currentPassword.
             final currentPassword = lastProgress!.currentPassword ?? '';
             final isSuccess = currentPassword.isNotEmpty && 
                               currentPassword != '...';
@@ -163,7 +163,7 @@ class RustPasswordCrackerService {
     }
   }
 
-  /// Testa uma única senha (para debug/validação)
+  /// Tests a single password (debug/validation).
   static Future<bool> testPassword(
     Uint8List fileBytes,
     String password,
@@ -185,7 +185,7 @@ class RustPasswordCrackerService {
     }
   }
 
-  /// Estima quantas combinações serão testadas
+  /// Estimates how many combinations will be tested.
   static Future<BigInt> estimateCombinations(
     AttackConfiguration config,
   ) async {

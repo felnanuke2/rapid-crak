@@ -10,7 +10,7 @@ import '../../domain/entities/attack_entities.dart';
 import '../state/password_cracker_provider.dart';
 import '../widgets/tech_widgets.dart';
 
-/// Tela 1: Importação de Arquivo (Clean State)
+/// Screen 1: File Import (Clean State).
 class ImportFileScreen extends StatelessWidget {
   const ImportFileScreen({Key? key}) : super(key: key);
 
@@ -46,10 +46,10 @@ class ImportFileScreen extends StatelessWidget {
                 ],
               ),
 
-              // Centro: Ícone + Texto
+              // Center: Icon + Text.
               Column(
                 children: [
-                  // Ícone animado (pulsando)
+                  // Animated icon (pulsing).
                   TechCard(
                     borderColor: AppColors.primary,
                     padding: const EdgeInsets.all(32),
@@ -78,7 +78,7 @@ class ImportFileScreen extends StatelessWidget {
                 ],
               ),
 
-              // Botão
+              // Button.
               Consumer<PasswordCrackerProvider>(
                 builder: (context, provider, _) {
                   return PrimaryActionButton(
@@ -99,7 +99,7 @@ class ImportFileScreen extends StatelessWidget {
     try {
       final result = await FileService.pickFile();
 
-      if (result == null) return; // Cancelado
+      if (result == null) return; // Canceled.
 
       final error = FileService.validateFile(result.file);
       if (error != null) {

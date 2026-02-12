@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import '../../generated_l10n/app_localizations.dart';
 
-/// Extensões úteis para Duration
+/// Useful extensions for Duration.
 extension DurationExtensions on Duration {
-  /// Retorna um bool se a duração é maior que um valor específico
+  /// Returns true if the duration is greater than a specific value.
   bool isLongerThan(Duration other) => compareTo(other) > 0;
 
-  /// Retorna um bool se a duração é menor que um valor específico
+  /// Returns true if the duration is less than a specific value.
   bool isShorterThan(Duration other) => compareTo(other) < 0;
 
-  /// Retorna a duração em minutos com decimais
+  /// Returns the duration in minutes with decimals.
   double get inMinutesWithDecimals => inMilliseconds / (1000 * 60);
 
-  /// Formata a duração como "00:04:12" (HH:MM:SS)
+  /// Formats the duration as "00:04:12" (HH:MM:SS).
   String toFormattedString() {
     final hours = inHours.toString().padLeft(2, '0');
     final minutes = (inMinutes % 60).toString().padLeft(2, '0');
@@ -20,7 +20,7 @@ extension DurationExtensions on Duration {
     return '$hours:$minutes:$seconds';
   }
 
-  /// Retorna descrição legível: "2h 30m 45s"
+  /// Returns a readable description: "2h 30m 45s".
   String toReadableString() {
     final h = inHours;
     final m = inMinutes.remainder(60);
@@ -35,88 +35,88 @@ extension DurationExtensions on Duration {
   }
 }
 
-/// Extensões úteis para BuildContext
+/// Useful extensions for BuildContext.
 extension ContextExtensions on BuildContext {
-  /// Atalho para theme
+  /// Shortcut to theme.
   ThemeData get theme => Theme.of(this);
 
-  /// Atalho para media query
+  /// Shortcut to media query.
   MediaQueryData get mediaQuery => MediaQuery.of(this);
 
-  /// Atalho para tamanho da tela
+  /// Shortcut to screen size.
   Size get screenSize => mediaQuery.size;
 
-  /// Atalho para width da tela
+  /// Shortcut to screen width.
   double get screenWidth => screenSize.width;
 
-  /// Atalho para height da tela
+  /// Shortcut to screen height.
   double get screenHeight => screenSize.height;
 
-  /// Verifica se é landscape
+  /// Checks if landscape.
   bool get isLandscape => mediaQuery.orientation == Orientation.landscape;
 
-  /// Verifica se é portrait
+  /// Checks if portrait.
   bool get isPortrait => mediaQuery.orientation == Orientation.portrait;
 
-  /// Verifica se o dispositivo é pequeno (< 600dp)
+  /// Checks if the device is small (< 600dp).
   bool get isSmallDevice => screenWidth < 600;
 
-  /// Obtém padding do sistema (notches, etc)
+  /// Gets system padding (notches, etc).
   EdgeInsets get systemPadding => mediaQuery.padding;
 
-  /// Obtém viewinsets (teclado)
+  /// Gets view insets (keyboard).
   EdgeInsets get viewInsets => mediaQuery.viewInsets;
 
-  /// Fecha o teclado
+  /// Closes the keyboard.
   void closeKeyboard() {
     FocusScope.of(this).unfocus();
   }
 
-  /// Atalho para localizações do app
+  /// Shortcut to app localizations.
   AppLocalizations get l10n => AppLocalizations.of(this)!;
 
-  /// Atalho alternativo para localizações
+  /// Alternate shortcut to localizations.
   AppLocalizations get loc => AppLocalizations.of(this)!;
 }
 
-/// Extensões úteis para String
+/// Useful extensions for String.
 extension StringExtensions on String {
-  /// Verifica se a string é email válido (básico)
+  /// Checks if the string is a valid email (basic).
   bool get isValidEmail {
     return RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(this);
   }
 
-  /// Capitaliza primeira letra
+  /// Capitalizes the first letter.
   String get capitalize {
     if (isEmpty) return this;
     return '${this[0].toUpperCase()}${substring(1)}';
   }
 
-  /// Remove espaços em branco
+  /// Removes whitespace.
   String get removeWhitespace => replaceAll(RegExp(r'\s+'), '');
 
-  /// Verifica se contém apenas números
+  /// Checks if it contains only numbers.
   bool get isNumeric => RegExp(r'^[0-9]+$').hasMatch(this);
 
-  /// Verifica se contém apenas letras
+  /// Checks if it contains only letters.
   bool get isAlpha => RegExp(r'^[a-zA-Z]+$').hasMatch(this);
 
-  /// Trunca com reticências
+  /// Truncates with ellipsis.
   String truncate(int length) {
     if (this.length <= length) return this;
     return '${substring(0, length)}...';
   }
 
-  /// Inverte a string
+  /// Reverses the string.
   String get reversed => split('').reversed.join('');
 }
 
-/// Extensões úteis para List
+/// Useful extensions for List.
 extension ListExtensions<T> on List<T> {
-  /// Retorna um item aleatório
+  /// Returns a random item.
   T? get random => isEmpty ? null : this[(DateTime.now().millisecond % length)];
 
-  /// Divide lista em chunks
+  /// Splits the list into chunks.
   List<List<T>> chunk(int size) {
     final chunks = <List<T>>[];
     for (var i = 0; i < length; i += size) {
@@ -125,28 +125,28 @@ extension ListExtensions<T> on List<T> {
     return chunks;
   }
 
-  /// Retorna lista sem duplicatas
+  /// Returns a list without duplicates.
   List<T> get unique => toSet().toList();
 }
 
-/// Extensões úteis para int
+/// Useful extensions for int.
 extension IntExtensions on int {
-  /// Verifica se é par
+  /// Checks if even.
   bool get isEven => this % 2 == 0;
 
-  /// Verifica se é ímpar
+  /// Checks if odd.
   bool get isOdd => this % 2 != 0;
 
-  /// Converte para Duration em segundos
+  /// Converts to Duration in seconds.
   Duration get seconds => Duration(seconds: this);
 
-  /// Converte para Duration em minutos
+  /// Converts to Duration in minutes.
   Duration get minutes => Duration(minutes: this);
 
-  /// Converte para Duration em horas
+  /// Converts to Duration in hours.
   Duration get hours => Duration(hours: this);
 
-  /// Formata como número grande: 1000000 -> 1.000.000
+  /// Formats as a large number: 1000000 -> 1.000.000.
   String get formatted {
     return toString().replaceAllMapped(
       RegExp(r'\B(?=(\d{3})+(?!\d))'),

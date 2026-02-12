@@ -10,7 +10,7 @@ import '../state/password_cracker_provider.dart';
 import '../widgets/tech_widgets.dart';
 import '../../domain/entities/attack_entities.dart';
 
-/// Tela 2: Configuração do Ataque (War Room)
+/// Screen 2: Attack Configuration (War Room).
 class AttackConfigScreen extends StatefulWidget {
   const AttackConfigScreen({Key? key}) : super(key: key);
 
@@ -110,7 +110,7 @@ class _AttackConfigScreenState extends State<AttackConfigScreen> {
 
                 const Gap(32),
 
-                // Estratégia
+                // Strategy.
                 StrategySelector(
                   numbers: _numbers,
                   lowercase: _lowercase,
@@ -182,7 +182,7 @@ class _AttackConfigScreenState extends State<AttackConfigScreen> {
 
                 const Gap(32),
 
-                // Botões
+                // Buttons.
                 Column(
                   children: [
                     PrimaryActionButton(
@@ -262,9 +262,9 @@ class _AttackConfigScreenState extends State<AttackConfigScreen> {
     final provider = context.read<PasswordCrackerProvider>();
     provider.updateConfiguration(config);
 
-    // Inicia o ataque real via Rust (fire-and-forget)
-    // executeAttack chama provider.startAttack() internamente,
-    // que muda o estado para running e o router mostra a tela de execução
+    // Starts the real attack via Rust (fire-and-forget).
+    // executeAttack calls provider.startAttack() internally,
+    // which switches state to running and the router shows the execution screen.
     RustPasswordCrackerService.executeAttack(
       fileBytes: provider.loadedFile!.bytes,
       config: config,

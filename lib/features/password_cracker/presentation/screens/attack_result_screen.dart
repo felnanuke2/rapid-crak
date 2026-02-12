@@ -9,7 +9,7 @@ import '../../../../generated_l10n/app_localizations.dart';
 import '../state/password_cracker_provider.dart';
 import '../widgets/tech_widgets.dart';
 
-/// Tela 4: Resultado do Ataque (Sucesso ou Falha)
+/// Screen 4: Attack Result (Success or Failure).
 class AttackResultScreen extends StatelessWidget {
   const AttackResultScreen({Key? key}) : super(key: key);
 
@@ -36,9 +36,9 @@ class AttackResultScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Resultado Success or Failure
+                  // Result: Success or Failure.
                   if (result.success) ...[
-                    // Sucesso
+                    // Success.
                     const Gap(40),
                     Center(
                       child: Icon(
@@ -58,7 +58,7 @@ class AttackResultScreen extends StatelessWidget {
                     ),
                     const Gap(32),
 
-                    // Senha (Code Display)
+                    // Password (Code Display).
                     CodeDisplay(
                       code: result.password ?? 'N/A',
                       onCopy: () {
@@ -76,7 +76,7 @@ class AttackResultScreen extends StatelessWidget {
 
                     const Gap(32),
 
-                    // Estatísticas
+                    // Statistics.
                     Text(
                       AppLocalizations.of(context)!.statistics,
                       style: AppTextStyles.labelSmall.copyWith(
@@ -113,7 +113,7 @@ class AttackResultScreen extends StatelessWidget {
 
                     const Gap(32),
 
-                    // Botões
+                    // Buttons.
                     Column(
                       children: [
                         PrimaryActionButton(
@@ -143,7 +143,7 @@ class AttackResultScreen extends StatelessWidget {
                       ],
                     ),
                   ] else ...[
-                    // Falha
+                    // Failure.
                     const Gap(40),
                     Center(
                       child: Icon(
@@ -175,7 +175,7 @@ class AttackResultScreen extends StatelessWidget {
 
                     const Gap(32),
 
-                    // Estatísticas
+                    // Statistics.
                     Text(
                       AppLocalizations.of(context)!.statistics,
                       style: AppTextStyles.labelSmall.copyWith(
@@ -212,7 +212,7 @@ class AttackResultScreen extends StatelessWidget {
 
                     const Gap(32),
 
-                    // Botões
+                    // Buttons.
                     Column(
                       children: [
                         PrimaryActionButton(

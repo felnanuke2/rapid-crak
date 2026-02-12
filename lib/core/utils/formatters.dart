@@ -2,29 +2,29 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import '../../generated_l10n/app_localizations.dart';
 
-/// Utilitários para formatação de números, durações e textos
+/// Utilities for formatting numbers, durations, and text.
 class AppFormatters {
-  /// Formata números grandes com separador de milhares
-  /// Ex: 1000000 -> 1.000.000
+  /// Formats large numbers with thousands separators.
+  /// Example: 1000000 -> 1.000.000
   static String formatLargeNumber(int number) {
     final formatter = NumberFormat('#,###');
     return formatter.format(number);
   }
 
-  /// Formata velocidade (senhas por segundo)
-  /// Ex: 1500000 -> "1.500.000 senhas/seg"
-  /// Para usar com localization, forneça um [BuildContext]
+  /// Formats speed (passwords per second).
+  /// Example: 1500000 -> "1.500.000 senhas/seg"
+  /// For localization, provide a [BuildContext].
   static String formatSpeed(double passwordsPerSecond, {BuildContext? context}) {
     final formatted = formatLargeNumber(passwordsPerSecond.round());
     if (context == null) {
-      // Fallback para português padrão
+      // Fallback to default Portuguese.
       return '$formatted senhas/seg';
     }
     return AppLocalizations.of(context)!.passwordsPerSecond(formatted);
   }
 
-  /// Formata duração para HH:MM:SS
-  /// Ex: Duration(seconds: 252) -> "00:04:12"
+  /// Formats duration as HH:MM:SS.
+  /// Example: Duration(seconds: 252) -> "00:04:12"
   static String formatDuration(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, '0');
     final hours = twoDigits(duration.inHours);
@@ -33,7 +33,7 @@ class AppFormatters {
     return '$hours:$minutes:$seconds';
   }
 
-  /// Formata tamanho de arquivo em bytes/KB/MB/GB
+  /// Formats file size in bytes/KB/MB/GB.
   static String formatFileSize(int bytes) {
     const suffixes = ['B', 'KB', 'MB', 'GB'];
     if (bytes == 0) return '0 B';
@@ -45,32 +45,32 @@ class AppFormatters {
     return '${size.toStringAsFixed(2)} ${suffixes[index]}';
   }
 
-  /// Formata nome de arquivo removendo extensão (opcional)
+  /// Formats a file name, optionally removing the extension.
   static String formatFileName(String filePath, {bool removeExtension = false}) {
     final fileName = filePath.split('/').last;
     if (!removeExtension) return fileName;
     return fileName.split('.').first;
   }
 
-  /// Formata tentativas com formatação de número grande
-  /// Ex: 45201000 -> "45.201.000 testadas"
-  /// Para usar com localization, forneça um [BuildContext]
+  /// Formats attempts with large-number formatting.
+  /// Example: 45201000 -> "45.201.000 testadas"
+  /// For localization, provide a [BuildContext].
   static String formatAttempts(int attempts, {BuildContext? context}) {
     final formatted = formatLargeNumber(attempts);
     if (context == null) {
-      // Fallback para português padrão
+      // Fallback to default Portuguese.
       return '$formatted testadas';
     }
     return '${AppLocalizations.of(context)!.attemptedLabel} $formatted';
   }
 
-  /// Trunca texto para comprimento máximo com reticências
+  /// Truncates text to a maximum length with ellipsis.
   static String truncateText(String text, int maxLength) {
     if (text.length <= maxLength) return text;
     return '${text.substring(0, maxLength)}...';
   }
 
-  /// Formata tempo decorrido em formato legível
+  /// Formats elapsed time in a readable format.
   static String formatElapsedTime(Duration duration) {
     final hours = duration.inHours;
     final minutes = duration.inMinutes.remainder(60);
@@ -85,7 +85,7 @@ class AppFormatters {
     }
   }
 
-  /// Formata percentual com casas decimais
+  /// Formats a percentage with decimal places.
   static String formatPercentage(double percentage, {int decimals = 1}) {
     return '${percentage.toStringAsFixed(decimals)}%';
   }

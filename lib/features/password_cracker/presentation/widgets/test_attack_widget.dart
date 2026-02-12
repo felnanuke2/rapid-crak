@@ -5,7 +5,7 @@ import '../state/password_cracker_provider.dart';
 import '../../domain/services/rust_password_cracker_service.dart';
 import '../../domain/entities/attack_entities.dart';
 
-/// Widget de exemplo para testar a integração Rust
+/// Sample widget to test Rust integration.
 class TestAttackWidget extends StatelessWidget {
   const TestAttackWidget({super.key});
 
@@ -22,7 +22,7 @@ class TestAttackWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Botão para selecionar arquivo
+                // Button to select a file.
                 ElevatedButton.icon(
                   onPressed: provider.isAttackRunning
                       ? null
@@ -32,7 +32,7 @@ class TestAttackWidget extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
 
-                // Informações do arquivo
+                // File information.
                 if (provider.hasLoadedFile) ...[
                   Card(
                     child: ListTile(
@@ -44,7 +44,7 @@ class TestAttackWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
 
-                  // Configuração
+                  // Configuration.
                   Text('Configuração do Ataque',
                       style: Theme.of(context).textTheme.titleMedium),
                   const SizedBox(height: 8),
@@ -81,7 +81,7 @@ class TestAttackWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
 
-                  // Estratégia
+                  // Strategy.
                   CheckboxListTile(
                     title: const Text('Lowercase (a-z)'),
                     value: provider.configuration.strategy.lowercase,
@@ -122,7 +122,7 @@ class TestAttackWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
 
-                  // Botão de ataque
+                  // Attack button.
                   if (!provider.isAttackRunning)
                     ElevatedButton.icon(
                       onPressed: () => _startAttack(context, provider),
@@ -144,7 +144,7 @@ class TestAttackWidget extends StatelessWidget {
 
                   const SizedBox(height: 16),
 
-                  // Estatísticas em tempo real
+                  // Real-time statistics.
                   if (provider.currentStats != null) ...[
                     Card(
                       color: Colors.blue.shade50,
@@ -175,7 +175,7 @@ class TestAttackWidget extends StatelessWidget {
 
                   const SizedBox(height: 16),
 
-                  // Resultado
+                  // Result.
                   if (provider.lastResult != null) ...[
                     Card(
                       color: provider.hasSuccessfulResult

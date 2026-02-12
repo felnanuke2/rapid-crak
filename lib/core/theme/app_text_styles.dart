@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/// Estilos tipográficos com foco em legibilidade e design técnico
+/// Typography styles focused on readability and technical design.
 class AppTextStyles {
-  // Display styles (Headlines grandes)
+  // Display styles (large headlines).
   static final displayLarge = GoogleFonts.inter(
     fontSize: 32,
     fontWeight: FontWeight.bold,
@@ -62,7 +62,7 @@ class AppTextStyles {
     letterSpacing: 0.4,
   );
 
-  // Body styles (padrão para texto)
+  // Body styles (default for text).
   static final bodyLarge = GoogleFonts.inter(
     fontSize: 16,
     fontWeight: FontWeight.w400,
@@ -103,8 +103,8 @@ class AppTextStyles {
     letterSpacing: 0.5,
   );
 
-  // ============ MONOSPACED STYLES (Para código, senhas, hashes) ============
-  // Crucial para diferenciar: 0 vs O, 1 vs l, etc
+  // ============ MONOSPACED STYLES (for code, passwords, hashes) ============
+  // Crucial to distinguish: 0 vs O, 1 vs l, etc.
 
   static final monoDisplayLarge = GoogleFonts.jetBrainsMono(
     fontSize: 28,

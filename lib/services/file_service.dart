@@ -9,12 +9,12 @@ class FilePickResult {
   FilePickResult(this.file, this.bytes);
 }
 
-/// Serviço para gerenciar operações com arquivos
+/// Service for managing file operations.
 class FileService {
   static const List<String> supportedExtensions = ['zip', 'pdf', 'rar', '7z'];
 
-  /// Abre o seletor de arquivo
-  /// Retorna [FilePickResult] se bem-sucedido, null se cancelado
+  /// Opens the file picker.
+  /// Returns [FilePickResult] on success, null if canceled.
   static Future<FilePickResult?> pickFile() async {
     try {
       final result = await FilePicker.platform.pickFiles(
@@ -25,7 +25,7 @@ class FileService {
       );
 
       if (result == null || result.files.isEmpty) {
-        return null; // Usuário cancelou
+        return null; // User canceled.
       }
 
       final file = result.files.single;
@@ -48,13 +48,13 @@ class FileService {
     }
   }
 
-  /// Valida se o arquivo existe e é suportado
+  /// Validates whether the file exists and is supported.
   static bool isFileValid(LoadedFile file) {
     final extension = file.extension;
     return supportedExtensions.contains(extension);
   }
 
-  /// Retorna mensagem de erro se o arquivo for inválido
+  /// Returns an error message if the file is invalid.
   static String? validateFile(LoadedFile file) {
     if (!isFileValid(file)) {
       return 'Tipo de arquivo não suportado. Use: ${supportedExtensions.join(', ')}';
@@ -68,7 +68,7 @@ class FileService {
     return null;
   }
 
-  /// Retorna a lista de extensões suportadas como string formatado
+  /// Returns the supported extensions as a formatted string.
   static String get supportedFormats =>
       supportedExtensions.map((e) => '.$e').join(', ');
 }

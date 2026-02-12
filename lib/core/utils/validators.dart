@@ -1,13 +1,13 @@
-/// Validadores para entrada de dados
+/// Input validators.
 class AppValidators {
-  /// Valida se a extensão do arquivo é suportada
+  /// Validates if the file extension is supported.
   static bool isFileSupported(String fileName) {
     final supportedExtensions = ['zip', 'pdf', 'rar', '7z'];
     final extension = fileName.split('.').last.toLowerCase();
     return supportedExtensions.contains(extension);
   }
 
-  /// Retorna mensagem de erro para arquivo não suportado
+  /// Returns an error message for unsupported files.
   static String? validateFileExtension(String fileName) {
     if (!isFileSupported(fileName)) {
       return 'Arquivo não suportado. Use .zip, .pdf, .rar ou .7z';
@@ -15,7 +15,7 @@ class AppValidators {
     return null;
   }
 
-  /// Valida se o tamanho da senha é razoável
+  /// Validates whether the password length is reasonable.
   static String? validatePasswordLength(int minLength, int maxLength) {
     if (minLength > maxLength) {
       return 'Comprimento mínimo não pode ser maior que o máximo';
@@ -26,7 +26,7 @@ class AppValidators {
     return null;
   }
 
-  /// Valida se foi selecionado pelo menos um tipo de caractere
+  /// Validates that at least one character type was selected.
   static bool hasAtLeastOneCharacterType({
     required bool numbers,
     required bool lowercase,
@@ -36,7 +36,7 @@ class AppValidators {
     return numbers || lowercase || uppercase || symbols;
   }
 
-  /// Valida se o arquivo existe (básico)
+  /// Validates that the file path exists (basic).
   static bool isValidFilePath(String path) {
     return path.isNotEmpty && path.length > 3;
   }
