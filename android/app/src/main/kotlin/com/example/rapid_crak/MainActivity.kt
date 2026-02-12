@@ -1,4 +1,4 @@
-package com.example.bruteforce_doc_break
+package com.example.rapid_crak
 
 import io.flutter.embedding.android.FlutterActivity
 

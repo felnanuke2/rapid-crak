@@ -1,4 +1,4 @@
-name: bruteforce_doc_break
+name: rapid_crak
 description: "A high-performance document password cracking tool built with Flutter and Rust."
 version: 1.0.0+1
 publish_to: 'none'
@@ -13,7 +13,7 @@ dependencies:
   
   # Rust FFI interop
   flutter_rust_bridge: 2.11.1
-  rust_lib_bruteforce_doc_break:
+  rust_lib_rapid_crak:
     path: rust_builder
 
   # UI & Design

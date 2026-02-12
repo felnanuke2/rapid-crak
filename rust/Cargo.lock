@@ -759,7 +759,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c08c74e62047bb2de4ff487b251e4a92e24f48745648451635cec7d591162d9f"
 
 [[package]]
-name = "rust_lib_bruteforce_doc_break"
+name = "rust_lib_rapid_crak"
 version = "0.1.0"
 dependencies = [
  "anyhow",

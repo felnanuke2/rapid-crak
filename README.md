@@ -28,7 +28,7 @@
 ## 🏗️ Architecture
 
 ```
-bruteforce_doc_break/
+rapid_crak/
 ├── rust/                           # High-performance backend
 │   ├── src/api/password_cracker.rs # Core cracking algorithm
 │   ├── Cargo.toml                  # Dependencies: rayon, zip, anyhow
@@ -66,7 +66,7 @@ bruteforce_doc_break/
 ```bash
 # Clone repository
 git clone <repo_url>
-cd bruteforce_doc_break
+cd rapid_crak
 
 # Install dependencies
 flutter pub get

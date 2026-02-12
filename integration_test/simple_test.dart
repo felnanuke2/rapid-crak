@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:bruteforce_doc_break/app/app.dart';
-import 'package:bruteforce_doc_break/src/rust/frb_generated.dart';
+import 'package:rapid_crak/app/app.dart';
+import 'package:rapid_crak/src/rust/frb_generated.dart';
 import 'package:integration_test/integration_test.dart';
 
 void main() {

@@ -444,7 +444,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
-  rust_lib_bruteforce_doc_break:
+  rust_lib_rapid_crak:
     dependency: "direct main"
     description:
       path: rust_builder
