@@ -25,6 +25,22 @@
 - Console-style password log
 - Responsive state management with Provider
 
+## ⚠️ Platform Compatibility
+
+**This project is primarily developed and tested on macOS.**
+
+While the codebase includes platform-specific directories for Android, iOS, Linux, and Windows, **only macOS has been heavily tested and validated**. If you run this application on other platforms, you may encounter:
+
+- Build or compilation issues
+- Runtime errors or crashes
+- Performance degradation
+- Missing platform-specific features or integrations
+
+**Recommendations:**
+- For the best experience, use **macOS**
+- Other platforms may require additional configuration or debugging
+- Community contributions for other platform support are welcome!
+
 ## 🏗️ Architecture
 
 ```
@@ -60,6 +76,7 @@ rapid_crak/
 - Rust toolchain 1.70+
 - Cargo
 - flutter_rust_bridge CLI
+- **macOS** (recommended and tested platform)
 
 ### Setup
 
@@ -71,15 +88,17 @@ cd rapid_crak
 # Install dependencies
 flutter pub get
 
-# Install Rust dependencies (if not already done)
+# Install Rust dependencies for macOS
 rustup target add aarch64-apple-darwin x86_64-apple-darwin
 
 # Generate Rust bindings
 flutter_rust_bridge_codegen generate
 
-# Run app
+# Run app on macOS
 flutter run -d macos
 ```
+
+> **Note:** While setup instructions for other platforms exist below, they have not been extensively tested. Proceed with caution on non-macOS systems.
 
 ## � How to Run
 
@@ -127,31 +146,32 @@ Or use the configured VS Code task:
 
 #### Step 3: Select Target Platform
 When launching, choose your target platform:
-- `macos` - macOS
-- `ios` - iOS device or simulator
-- `android` - Android device or emulator
-- `web` - Web browser
-- `linux` - Linux desktop
-- `windows` - Windows desktop
+- `macos` - **macOS (Primary & Tested Platform)**
+- `ios` - iOS device or simulator ⚠️ *Limited testing*
+- `android` - Android device or emulator ⚠️ *Limited testing*
+- `web` - Web browser ⚠️ *Limited testing*
+- `linux` - Linux desktop ⚠️ *Limited testing*
+- `windows` - Windows desktop ⚠️ *Limited testing*
 
-#### Example: Run on macOS
+> **Important:** Only macOS has been heavily tested. Other platforms may have compatibility issues.
+
+#### Example: Run on macOS (Recommended)
 ```bash
 flutter run -d macos
 ```
 
-#### Example: Run on iOS Simulator
+#### Example: Run on iOS Simulator (Untested)
 ```bash
+# Use at your own risk
 flutter run -d "iPhone 15"
 ```
 
 ### Running from Terminal
 
-#### Full Setup (First Time)
+#### Full Setup (First Time - macOS)
 ```bash
-# 1. Install Rust dependencies
-rustup target add aarch64-apple-darwin x86_64-apple-darwin  # macOS
-rustup target add aarch64-linux-gnu                          # Linux
-rustup target add x86_64-pc-windows-msvc                     # Windows
+# 1. Install Rust dependencies for macOS
+rustup target add aarch64-apple-darwin x86_64-apple-darwin
 
 # 2. Install Flutter dependencies
 flutter pub get
@@ -159,8 +179,19 @@ flutter pub get
 # 3. Generate Rust bindings
 flutter_rust_bridge_codegen generate
 
-# 4. Run the app
+# 4. Run the app on macOS
 flutter run -d macos
+```
+
+#### For Other Platforms (⚠️ Not Heavily Tested)
+```bash
+# Linux (use at your own risk)
+rustup target add aarch64-linux-gnu
+flutter run -d linux
+
+# Windows (use at your own risk)
+rustup target add x86_64-pc-windows-msvc
+flutter run -d windows
 ```
 
 #### Quick Run (After Initial Setup)
@@ -262,7 +293,9 @@ unzip -l test_password.zip
 
 ## 📊 Performance Benchmarks
 
-### iPhone 14 Pro (6 cores)
+> **Note:** Benchmarks below are estimates. Actual performance heavily tested and validated only on **macOS**. Other platforms may show different results.
+
+### Example Apple Silicon Mac (M1/M2)
 
 | Config | Charset | Combinations | Time |
 |--------|---------|-------------|------|
