@@ -1,11 +1,11 @@
 {
-    "name": "rapid-crak",
-    "short_name": "rapid-crak",
+    "name": "Rapid Crak",
+    "short_name": "Rapid Crak",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "A high-performance document password cracking tool built with Flutter and Rust.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
